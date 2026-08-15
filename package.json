@@ -1,0 +1,11 @@
+{
+  "name": "9ossos",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "geocode": "node --use-system-ca geocode.js"
+  }
+}

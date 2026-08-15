@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#100e0c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>9ossos — Carnet resto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,560;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #100e0c;
+      --bg-2: #181512;
+      --card: #1f1b17;
+      --ink: #f6efe4;
+      --muted: #b3a79a;
+      --gold: #e0b15c;
+      --gold-2: #c4923a;
+      --olive: #7d9a6a;
+      --line: rgba(246, 239, 228, 0.1);
+      --shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.7);
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-t: env(safe-area-inset-top, 0px);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; -ms-overflow-style: none; }
+    *::-webkit-scrollbar { width: 0; height: 0; display: none; }
+    html, body { min-height: 100%; }
+    body {
+      font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.45;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button, input { font: inherit; color: inherit; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .ico { width: 18px; height: 18px; flex: 0 0 auto; }
+    .ico svg { width: 100%; height: 100%; display: block; }
+
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(18px + var(--safe-t)) 16px calc(28px + var(--safe-b));
+    }
+    @media (min-width: 900px) {
+      .wrap { max-width: 1280px; padding-left: 24px; padding-right: 24px; }
+    }
+
+    header { margin-bottom: 16px; }
+    .brand {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .logo {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(2rem, 7vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+    }
+    .logo em { color: var(--gold); font-style: italic; font-weight: 500; }
+    .tagline { color: var(--muted); margin-top: 8px; font-size: 0.92rem; max-width: 36ch; }
+    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    .user-chip {
+      display: flex; align-items: center; gap: 6px;
+      max-width: 140px;
+      padding: 0 4px 0 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      min-height: 42px;
+    }
+    .user-chip span {
+      font-size: 0.82rem; font-weight: 600;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .user-chip .icon-btn {
+      width: 34px; height: 34px; border: 0; background: transparent;
+    }
+    .icon-btn {
+      width: 42px; height: 42px;
+      display: grid; place-items: center;
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 12px;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .random-btn {
+      width: auto;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 14px;
+      background: var(--gold);
+      color: #1a140c;
+      border-color: var(--gold);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .progress {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .progress > div {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+    .progress b { display: block; font-family: Fraunces, Georgia, serif; font-size: 1.35rem; }
+    .progress span { color: var(--muted); font-size: 0.78rem; }
+
+    .controls {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 10px 0 12px;
+      background: linear-gradient(var(--bg) 70%, transparent);
+    }
+    .search {
+      display: flex; align-items: center; gap: 8px;
+      flex: 1 1 180px;
+      min-width: 140px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 14px;
+    }
+    .search input {
+      width: 100%; min-width: 0; border: 0; outline: none; background: transparent; font-size: 1rem;
+    }
+    .chips {
+      display: flex; gap: 8px; flex: 0 0 auto;
+    }
+    .pin-select { position: relative; flex: 0 0 auto; }
+    .pin-trigger {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 12px;
+      white-space: nowrap;
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 500;
+      height: 100%;
+    }
+    .pin-select.open .pin-trigger {
+      background: var(--gold);
+      color: #1a140c;
+      border-color: var(--gold);
+    }
+    .pin-menu {
+      position: fixed;
+      z-index: 80;
+      padding: 8px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      max-height: min(50vh, 360px);
+      overflow: auto;
+      min-width: 200px;
+    }
+    .pin-menu[hidden] { display: none; }
+    .pin-option {
+      width: 100%; display: flex; justify-content: space-between; gap: 10px;
+      border: 0; background: transparent; padding: 11px 12px; border-radius: 10px;
+      cursor: pointer; text-align: left;
+    }
+    .pin-option:hover, .pin-option[aria-selected="true"] { background: rgba(224, 177, 92, 0.12); }
+    .pin-option .n {
+      font-size: 0.7rem; font-weight: 600; color: var(--gold);
+      background: rgba(224, 177, 92, 0.14); padding: 2px 7px; border-radius: 999px;
+    }
+    .pin-divider { height: 1px; background: var(--line); margin: 6px 8px; }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 1180px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    article {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    article.picked { outline: 2px solid var(--gold); }
+    li.picked {
+      background: rgba(224, 177, 92, 0.14);
+      border-radius: 8px;
+      margin: 0 -4px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+    li.picked .dish { font-weight: 600; }
+
+    .sheet-bg {
+      position: fixed; inset: 0; z-index: 90;
+      background: rgba(0,0,0,.55);
+      display: grid; place-items: end center;
+    }
+    .sheet-bg[hidden] { display: none; }
+    .sheet {
+      width: min(100%, 420px);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px 22px 0 0;
+      padding: 20px 20px calc(20px + var(--safe-b));
+      box-shadow: var(--shadow);
+    }
+    @media (min-width: 700px) {
+      .sheet-bg { place-items: center; }
+      .sheet { border-radius: 22px; }
+    }
+    .sheet h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.6rem;
+      letter-spacing: -0.03em;
+      margin: 6px 0 8px;
+    }
+    .sheet .hint { color: var(--muted); font-size: 0.88rem; margin-bottom: 12px; }
+    .sheet ul { list-style: none; display: grid; gap: 8px; margin-bottom: 16px; }
+    .sheet li {
+      display: flex; justify-content: space-between; gap: 10px;
+      padding: 10px 12px; border-radius: 12px;
+      background: rgba(224,177,92,.1);
+      font-size: 0.92rem;
+    }
+    .sheet .price { color: var(--gold); font-weight: 600; }
+    .sheet-actions { display: flex; gap: 8px; }
+    .sheet-actions button {
+      flex: 1; min-height: 46px; border-radius: 14px; border: 1px solid var(--line);
+      background: var(--bg); color: var(--ink); cursor: pointer; font-weight: 600;
+    }
+    .sheet-actions .go { background: var(--gold); color: #1a140c; border-color: var(--gold); }
+    .cover {
+      position: relative;
+      height: 210px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 22% 18%, hsla(var(--h, 32), 62%, 48%, .42), transparent 52%),
+        radial-gradient(ellipse at 88% 78%, hsla(var(--h2, 18), 48%, 28%, .4), transparent 48%),
+        linear-gradient(165deg, #4a3426 0%, #1c1713 58%, #100e0c 100%);
+    }
+    .cover img {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cover img.fail { display: none; }
+    .cover-mark {
+      position: absolute;
+      right: 18px;
+      bottom: 56px;
+      width: 54px;
+      height: 54px;
+      opacity: 0.2;
+      color: var(--gold);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .cover-mark svg { width: 100%; height: 100%; }
+    .cover-grad, .cover-top, .visit-btn, .cover h2 { z-index: 2; }
+    .cover-grad {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(16,14,12,.15) 20%, rgba(16,14,12,.88) 100%);
+    }
+    .cover-top {
+      position: absolute; top: 12px; left: 12px; right: 12px;
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .pill {
+      font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;
+      padding: 5px 8px; border-radius: 999px; background: rgba(16,14,12,.55);
+      backdrop-filter: blur(8px);
+    }
+    .cover h2 {
+      position: absolute; left: 16px; right: 16px; bottom: 14px;
+      font-family: Fraunces, Georgia, serif; font-size: 1.55rem; letter-spacing: -0.03em; line-height: 1.1;
+    }
+    .visit-btn {
+      position: absolute; top: 12px; right: 12px;
+      display: flex; align-items: center; gap: 6px;
+      min-height: 42px; padding: 8px 12px;
+      border: 0; border-radius: 999px;
+      background: rgba(16,14,12,.72); color: var(--ink);
+      cursor: pointer; font-weight: 600; font-size: 0.82rem;
+    }
+    article.done .visit-btn { background: var(--gold); color: #1a140c; }
+
+    .body { padding: 12px 14px 14px; display: grid; gap: 8px; }
+    .addr { color: var(--muted); font-size: 0.82rem; }
+    .meal-meta { color: var(--gold); font-size: 0.72rem; font-weight: 600; }
+
+    .menu { list-style: none; display: grid; gap: 0; max-height: 168px; overflow: auto; }
+    .menu li {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+    .check {
+      width: 28px; height: 28px; display: grid; place-items: center;
+      border: 0; background: transparent; cursor: pointer; color: var(--gold);
+    }
+    .box {
+      width: 16px; height: 16px; border-radius: 4px;
+      border: 1.5px solid rgba(224, 177, 92, 0.45);
+      display: grid; place-items: center;
+    }
+    .box svg { width: 10px; height: 10px; opacity: 0; }
+    li.eaten .box { background: var(--gold); border-color: var(--gold); color: #1a140c; }
+    li.eaten .box svg { opacity: 1; }
+    li.eaten .dish { text-decoration: line-through; opacity: 0.5; }
+    .dish { font-size: 0.78rem; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .price { color: var(--gold); font-weight: 600; font-size: 0.75rem; white-space: nowrap; }
+
+    .foot { display: flex; flex-wrap: wrap; gap: 10px 14px; }
+    .foot a {
+      color: var(--muted); text-decoration: none; font-size: 0.86rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .foot a:hover { color: var(--gold); }
+
+    .empty, .boot { text-align: center; color: var(--muted); padding: 48px 12px; }
+    .toast {
+      position: fixed; left: 50%; bottom: calc(18px + var(--safe-b));
+      transform: translateX(-50%) translateY(12px);
+      background: var(--gold); color: #1a140c;
+      padding: 11px 16px; border-radius: 999px; font-weight: 600; font-size: 0.88rem;
+      opacity: 0; pointer-events: none; transition: .2s; z-index: 50;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .live { display: none; }
+
+    .gate {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: calc(24px + var(--safe-t)) 16px calc(24px + var(--safe-b));
+    }
+    .gate[hidden] { display: none; }
+    .gate-card {
+      width: min(100%, 400px);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 28px 22px 22px;
+      box-shadow: var(--shadow);
+    }
+    .gate-card .logo { font-size: 2.4rem; margin-bottom: 6px; }
+    .gate-card .tagline { margin: 0 0 22px; }
+    .gate-tabs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+      background: var(--bg); border-radius: 12px; padding: 4px; margin-bottom: 18px;
+    }
+    .gate-tabs button {
+      border: 0; background: transparent; min-height: 40px;
+      border-radius: 10px; cursor: pointer; font-weight: 600; color: var(--muted);
+    }
+    .gate-tabs button.on { background: var(--gold); color: #1a140c; }
+    .gate-card label {
+      display: grid; gap: 6px; margin-bottom: 12px;
+      font-size: 0.78rem; font-weight: 600; color: var(--muted);
+    }
+    .gate-card input {
+      width: 100%; min-height: 46px; padding: 0 14px;
+      border-radius: 12px; border: 1px solid var(--line);
+      background: var(--bg); font-size: 1rem;
+    }
+    .gate-card input:focus { outline: 2px solid var(--gold); border-color: transparent; }
+    .field { display: flex; gap: 6px; align-items: stretch; }
+    .field input { flex: 1; min-width: 0; }
+    .field-btn {
+      flex: 0 0 46px; width: 46px;
+      display: grid; place-items: center;
+      border: 1px solid var(--line); border-radius: 12px;
+      background: var(--bg); color: var(--muted); cursor: pointer;
+    }
+    .field-btn:hover, .field-btn[aria-pressed="true"] { color: var(--gold); border-color: rgba(224, 177, 92, 0.45); }
+    .field-btn .ico { width: 18px; height: 18px; }
+    .gate-err { color: #e08a6a; font-size: 0.86rem; min-height: 1.3em; margin: 4px 0 12px; }
+    .gate-go {
+      width: 100%; min-height: 48px; border: 0; border-radius: 14px;
+      background: var(--gold); color: #1a140c; font-weight: 700; cursor: pointer;
+    }
+    .gate-go:disabled { opacity: 0.55; cursor: wait; }
+  </style>
+</head>
+<body>
+  <div class="gate" id="gate">
+    <form class="gate-card" id="auth-form" autocomplete="off">
+      <p class="logo">9os<em>sos</em></p>
+      <p class="tagline">Connecte-toi pour retrouver ta checklist, ou crée un compte.</p>
+      <div class="gate-tabs" role="tablist">
+        <button type="button" class="on" id="tab-login">Connexion</button>
+        <button type="button" id="tab-register">Créer un compte</button>
+      </div>
+      <div id="login-fields">
+        <label>Identifiant
+          <input id="auth-user" name="username" autocomplete="username" required minlength="2" maxlength="24" />
+        </label>
+        <label>Mot de passe
+          <div class="field">
+            <input id="auth-pass" name="password" type="password" autocomplete="current-password" required minlength="4" />
+            <button class="field-btn" id="btn-peek-login" type="button" title="Afficher le mot de passe" aria-label="Afficher le mot de passe" aria-pressed="false"></button>
+          </div>
+        </label>
+      </div>
+      <div id="register-fields" hidden>
+        <label>Identifiant
+          <div class="field">
+            <input id="reg-user" name="new-username" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore minlength="2" maxlength="24" disabled />
+            <button class="field-btn" id="btn-rand-user" type="button" title="Identifiant aléatoire" aria-label="Générer un identifiant"></button>
+          </div>
+        </label>
+        <label>Mot de passe
+          <div class="field">
+            <input id="reg-pass" name="new-password" type="password" autocomplete="new-password" data-lpignore="true" data-1p-ignore minlength="4" disabled />
+            <button class="field-btn" id="btn-peek-reg" type="button" title="Afficher le mot de passe" aria-label="Afficher le mot de passe" aria-pressed="false"></button>
+            <button class="field-btn" id="btn-rand-pass" type="button" title="Mot de passe aléatoire" aria-label="Générer un mot de passe"></button>
+          </div>
+        </label>
+      </div>
+      <p class="gate-err" id="auth-err"></p>
+      <button class="gate-go" id="auth-go" type="submit">Entrer</button>
+    </form>
+  </div>
+  <div class="wrap" id="app" hidden>
+    <header>
+      <div class="brand">
+        <div>
+          <p class="logo">9os<em>sos</em></p>
+          <p class="tagline">Ton carnet de visites : coche les restos et les plats déjà goûtés.</p>
+        </div>
+        <div class="header-actions">
+          <div class="user-chip">
+            <span id="user-name"></span>
+            <button class="icon-btn" id="btn-logout" type="button" title="Déconnexion" aria-label="Déconnexion"></button>
+          </div>
+          <button class="icon-btn random-btn" id="btn-random" type="button" aria-label="Choisir un resto au hasard">Hasard</button>
+          <button class="icon-btn" id="btn-export" title="Exporter" aria-label="Exporter la checklist"></button>
+          <button class="icon-btn" id="btn-import" title="Importer" aria-label="Importer la checklist"></button>
+          <input id="import-file" type="file" accept="application/json,.json" hidden />
+        </div>
+      </div>
+      <div class="progress" id="stats" hidden>
+        <div><b id="prog-spots">0</b><span>restos visités</span></div>
+        <div><b id="prog-dishes">0</b><span>plats goûtés</span></div>
+      </div>
+    </header>
+
+    <div class="controls" id="controls" hidden>
+      <label class="search">
+        <span class="ico" id="ico-search"></span>
+        <input id="q" type="search" placeholder="Chercher un resto ou un plat" autocomplete="off" />
+      </label>
+      <div class="chips">
+        <div class="pin-select" id="city-picker">
+          <button type="button" class="pin-trigger" id="city-btn" aria-haspopup="listbox" aria-expanded="false">
+            <span class="ico" id="ico-pin"></span>
+            <span id="city-label">Casablanca</span>
+          </button>
+          <div class="pin-menu" id="city-menu" hidden></div>
+        </div>
+        <div class="pin-select near" id="near-picker">
+          <button type="button" class="pin-trigger" id="near-btn" aria-haspopup="listbox" aria-expanded="false">
+            <span class="ico" id="ico-near"></span>
+            <span id="near-label">Autour</span>
+          </button>
+          <div class="pin-menu" id="near-menu" hidden></div>
+        </div>
+        <div class="pin-select" id="done-picker">
+          <button type="button" class="pin-trigger" id="done-btn">
+            <span id="done-label">Statut</span>
+          </button>
+          <div class="pin-menu" id="done-menu" hidden></div>
+        </div>
+        <div class="pin-select" id="price-picker">
+          <button type="button" class="pin-trigger" id="price-btn">
+            <span id="price-label">Prix</span>
+          </button>
+          <div class="pin-menu" id="price-menu" hidden></div>
+        </div>
+        <div class="pin-select" id="sort-picker">
+          <button type="button" class="pin-trigger" id="sort-btn">
+            <span id="sort-label">Visites</span>
+          </button>
+          <div class="pin-menu" id="sort-menu" hidden></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="boot" class="boot">Ouverture du carnet…</div>
+    <div id="empty" class="empty" hidden>Rien ici pour l’instant.</div>
+    <div class="grid" id="grid"></div>
+  </div>
+  <div class="sheet-bg" id="draw-sheet" hidden>
+    <div class="sheet" role="dialog" aria-labelledby="draw-title">
+      <p class="hint">Tirage du jour</p>
+      <h3 id="draw-title"></h3>
+      <p class="hint" id="draw-addr"></p>
+      <ul id="draw-dishes"></ul>
+      <div class="sheet-actions">
+        <button type="button" id="draw-again">Autre</button>
+        <button type="button" class="go" id="draw-go">C’est parti</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <span class="live" id="live"><span id="live-label"></span></span>
+
+  <script>
+    const ICO = {
+      search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+      pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>',
+      near: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/></svg>',
+      check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M5 12.5 9.5 17 19 7"/></svg>',
+      map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 4 8 3 5-2v15l-5 2-8-3-5 2V6z"/><path d="M8 4v15M16 7v15"/></svg>',
+      ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>',
+      down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12M7 12l5 5 5-5M5 20h14"/></svg>',
+      up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V8M7 12l5-5 5 5M5 4h14"/></svg>',
+      dice: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><circle cx="16" cy="8" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="8" cy="16" r="1.2" fill="currentColor"/><circle cx="16" cy="16" r="1.2" fill="currentColor"/></svg>',
+      out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 7V5a2 2 0 0 1 2-2h7v18h-7a2 2 0 0 1-2-2v-2"/><path d="M15 12H3m0 0 3-3M3 12l3 3"/></svg>',
+      eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+      eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.5 10.7a3 3 0 0 0 4.1 4.1M9.9 5.2A11 11 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-4.2 4.8M6.1 6.6C3.5 8.5 2 12 2 12s3.5 7 10 7c1.6 0 3-.3 4.3-.8"/></svg>',
+    };
+
+    const COVERS = {
+      sushi: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=900&q=70",
+      pizza: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=70",
+      burger: "https://images.unsplash.com/photo-1568901345629-363cdb57a1d4?auto=format&fit=crop&w=900&q=70",
+      tacos: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=70",
+      pasta: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a7?auto=format&fit=crop&w=900&q=70",
+      steak: "https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=900&q=70",
+      seafood: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=70",
+      chicken: "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=900&q=70",
+      tajine: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=900&q=70",
+      dessert: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=70",
+      cafe: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=70",
+      ice: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=900&q=70",
+      sandwich: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=70",
+      grill: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=70",
+      table: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=70",
+      pastry: "https://images.unsplash.com/photo-1486428186264-a6c5c081e0f8?auto=format&fit=crop&w=900&q=70"
+    };
+
+    const CITIES = [
+      "Casablanca", "Rabat", "Tanger", "Marrakech", "Agadir", "Fès", "Fes",
+      "Oujda", "Tétouan", "Tetouan", "Mohammedia", "Témara", "Temara",
+      "El Jadida", "Oualidia", "Kénitra", "Kenitra", "Salé", "Sala Al Jadida",
+      "Meknès", "Meknes", "Essaouira", "Dar Bouazza", "Bouskoura", "Nador",
+      "Chefchaouen", "Asilah", "El Mansouria", "Harhoura", "Aïn Atiq", "Ain Atiq",
+      "Boulaouane", "Skhirat", "Ifrane", "Ouarzazate", "Dakhla", "Laâyoune",
+      "Beni Mellal", "Safi", "Larache", "Fnideq", "Martil", "M’diq", "Mdiq"
+    ];
+    const CITY_ALIAS = {
+      Fes: "Fès", Tetouan: "Tétouan", Temara: "Témara", Kenitra: "Kénitra",
+      Meknes: "Meknès", "Ain Atiq": "Aïn Atiq", Mdiq: "M’diq", "M'diq": "M’diq"
+    };
+    const ARABIC_CITIES = [
+      ["الدار البيضاء", "Casablanca"], ["الدارالبيضاء", "Casablanca"],
+      ["مراكش", "Marrakech"], ["الرباط", "Rabat"], ["طنجة", "Tanger"],
+      ["فاس", "Fès"], ["وجدة", "Oujda"], ["أكادير", "Agadir"]
+    ];
+    const DISTRICT_TO_CITY = [
+      ["maârif", "Casablanca"], ["maarif", "Casablanca"], ["aïn sebaâ", "Casablanca"],
+      ["ain sebaâ", "Casablanca"], ["aïn sebaa", "Casablanca"], ["ain sebaa", "Casablanca"],
+      ["ain seba", "Casablanca"], ["sidi maârouf", "Casablanca"], ["sidi maarouf", "Casablanca"],
+      ["aïn chock", "Casablanca"], ["ain chock", "Casablanca"], ["2 mars", "Casablanca"],
+      ["palmiers", "Casablanca"], ["palmier", "Casablanca"], ["bourgogne", "Casablanca"],
+      ["bernoussi", "Casablanca"], ["belvédère", "Casablanca"], ["belvedere", "Casablanca"],
+      ["sidi moumen", "Casablanca"], ["el hank", "Casablanca"], ["morocco mall", "Casablanca"],
+      ["marina mall", "Casablanca"], ["marina shopping", "Casablanca"], ["ziraoui", "Casablanca"],
+      ["hay hassani", "Casablanca"], ["aïn diab", "Casablanca"], ["ain diab", "Casablanca"],
+      ["derb sultan", "Casablanca"], ["درب السلطان", "Casablanca"], ["californie", "Casablanca"],
+      ["gauthier", "Casablanca"], ["beauséjour", "Casablanca"], ["beausejour", "Casablanca"],
+      ["oulfa", "Casablanca"], ["anassi", "Casablanca"], ["tit mellil", "Casablanca"],
+      ["mers sultan", "Casablanca"], ["hay mohammadi", "Casablanca"], ["roches noires", "Casablanca"],
+      ["twin center", "Casablanca"], ["anoual", "Casablanca"], ["racine", "Casablanca"], ["ghandi", "Casablanca"]
+    ];
+    const ARABIC_RE = /[\u0600-\u06FF]/;
+    const STORE_KEY = "9ossos-progress-v1";
+
+    function clean(text) {
+      return (text || "").replace(/[\u2066-\u2069\u202A-\u202E\u200E\u200F]/g, "").replace(/\s+/g, " ").trim();
+    }
+    function detectCity(text) {
+      for (const [ar, fr] of ARABIC_CITIES) if (text.includes(ar)) return fr;
+      const lower = text.toLowerCase();
+      for (const [district, city] of DISTRICT_TO_CITY) if (lower.includes(district)) return city;
+      if (/\boasis\b/i.test(text) && !/benslimane/i.test(text) && !/serenity/i.test(text)) return "Casablanca";
+      for (const city of CITIES) {
+        if (lower.includes(city.toLowerCase())) return CITY_ALIAS[city] || city;
+      }
+      if (/\bcasa\b/i.test(text) || text.includes("كازا") || text.includes("f'casa") || text.includes("f’casa")) return "Casablanca";
+      return "";
+    }
+    function parsePrices(text) {
+      const items = [];
+      const re = /💰\s*([^💰:：]+?)\s*[:：]\s*([^💰]+)/g;
+      let match;
+      while ((match = re.exec(text))) {
+        const dish = clean(match[1]).replace(/[.\s]+$/, "");
+        const price = clean(match[2]).replace(/[.\s]+$/, "");
+        if (dish && price) items.push({ dish, price, key: dishKey(dish) });
+      }
+      return items;
+    }
+    function dishKey(dish) {
+      return dish.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+    }
+    function parsePost(raw) {
+      const text = clean(raw.description);
+      const pin = text.match(/📍\s*([^💰🎁📅🕘🎮🚨📞]+)/);
+      let name = "", address = "";
+      if (pin) {
+        const loc = clean(pin[1]).replace(/[.\s]+$/, "");
+        const parts = loc.split(",").map((p) => p.trim()).filter(Boolean);
+        name = parts[0] || loc;
+        address = parts.slice(1).join(", ");
+      }
+      const named = Boolean(name);
+      let city = detectCity(text) || detectCity(address + " " + name);
+      const lastBit = (address || "").split(",").pop().trim();
+      if (/^marrakech$/i.test(lastBit)) city = "Casablanca";
+      const prices = parsePrices(text);
+      return {
+        name: name || "Spot 9ossos", named, address, city: city || "Ailleurs",
+        prices, blurb: !pin ? text : "", url: raw.url,
+        hay: [name, address, city, text].join(" ").toLowerCase()
+      };
+    }
+    function normName(name) {
+      return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/['’`]/g, "").replace(/[^a-z0-9\u0600-\u06ff]+/gi, " ")
+        .replace(/^(le|la|les|l|the|el|al)\s+/, "").trim();
+    }
+    function mergePrices(group) {
+      const map = new Map();
+      for (const post of group) for (const item of post.prices) if (!map.has(item.key)) map.set(item.key, item);
+      return [...map.values()];
+    }
+    function mergePosts(posts) {
+      const groups = new Map();
+      for (const post of posts) {
+        const key = post.named ? `${normName(post.name)}|${post.city}` : post.url;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(post);
+      }
+      return [...groups.entries()].map(([key, group], i) => {
+        const newest = group[0];
+        const prices = mergePrices(group);
+        return {
+          name: newest.name, named: newest.named,
+          address: group.map((g) => g.address).sort((a, b) => b.length - a.length)[0] || "",
+          city: newest.city, prices,
+          blurb: prices.length ? "" : ([...new Set(group.map((g) => g.blurb).filter(Boolean))][0] || ""),
+          urls: [...new Set(group.map((g) => g.url))], visits: group.length, seen: i,
+          geoKey: key, lat: null, lng: null, hay: group.map((g) => g.hay).join(" ")
+        };
+      });
+    }
+    function coverKind(post) {
+      const hay = (post.name + " " + post.prices.map((p) => p.dish).join(" ")).toLowerCase();
+      if (/sushi|maki|sashimi|poke|ramen|yakitori|jap/.test(hay)) return "sushi";
+      if (/pizza|trattoria|napoli|italiano/.test(hay)) return "pizza";
+      if (/burger|smash|bun/.test(hay)) return "burger";
+      if (/tacos|burrito/.test(hay)) return "tacos";
+      if (/p[âa]tes|pasta|tagliatelle|spaghetti|risotto/.test(hay)) return "pasta";
+      if (/steak|entrec[oô]te|c[oô]te|grillade|viande/.test(hay)) return "steak";
+      if (/crevette|poisson|seafood|paella|calamar|gambas|fish/.test(hay)) return "seafood";
+      if (/poulet|chicken|djaj|wings/.test(hay)) return "chicken";
+      if (/tajine|tanjya|couscous|kefta|beldi/.test(hay)) return "tajine";
+      if (/glace|ice|sundae|tiramisu|cheesecake|chocolat|dessert|kunafa/.test(hay)) return "dessert";
+      if (/caf[eé]|latte|matcha|coffee/.test(hay)) return "cafe";
+      if (/cr[eê]pe|gaufre|pancake|donut|pastry/.test(hay)) return "pastry";
+      if (/sandwich|panini|shawarma|chawarma/.test(hay)) return "sandwich";
+      if (/grill|brochette|kebab|d[oö]ner/.test(hay)) return "grill";
+      return "table";
+    }
+    function coverFor(post) {
+      return COVERS[coverKind(post)] || COVERS.table;
+    }
+    function coverHue(post) {
+      let h = 0;
+      for (const c of post.name) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+      return { h: 18 + (h % 28), h2: 8 + ((h >> 5) % 22) };
+    }
+
+    const state = {
+      posts: [], city: "Casablanca", price: "with", sort: "visits", done: "all",
+      here: null, radius: null, geo: {}, ready: false,
+      pick: null, user: null, mode: "login",
+      progress: { spots: {} }
+    };
+
+    function cacheKey() {
+      return state.user ? `${STORE_KEY}:${state.user.toLowerCase()}` : STORE_KEY;
+    }
+    function loadLocalProgress() {
+      try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; }
+      catch { return null; }
+    }
+    function saveProgress() {
+      if (state.user) localStorage.setItem(cacheKey(), JSON.stringify(state.progress));
+      queueSync();
+    }
+    function queueSync() {
+      clearTimeout(queueSync.timer);
+      queueSync.timer = setTimeout(syncProgress, 400);
+    }
+    function syncProgress() {
+      if (!state.user) return;
+      return api("PUT", "/api/checklist", state.progress).catch(() => toast("Checklist non synchronisée"));
+    }
+    async function api(method, url, body) {
+      const res = await fetch(url, {
+        method,
+        credentials: "same-origin",
+        headers: body ? { "Content-Type": "application/json" } : undefined,
+        body: body ? JSON.stringify(body) : undefined
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Erreur");
+      return data;
+    }
+    function enterApp(user, progress) {
+      state.user = user;
+      state.progress = progress && progress.spots ? progress : { spots: {} };
+      document.getElementById("user-name").textContent = user;
+      document.getElementById("gate").hidden = true;
+      document.getElementById("app").hidden = false;
+      loadData(false);
+    }
+    function spotState(key) {
+      if (!state.progress.spots[key]) state.progress.spots[key] = { visited: false, dishes: {} };
+      return state.progress.spots[key];
+    }
+    function isVisited(post) { return Boolean(spotState(post.geoKey).visited); }
+    function isEaten(post, dish) { return Boolean(spotState(post.geoKey).dishes[dish.key]); }
+    function eatenCount(post) {
+      return post.prices.filter((d) => isEaten(post, d)).length;
+    }
+
+    function searchQuery() { return document.getElementById("q").value.trim().toLowerCase(); }
+    function matchesSearch(p, q) { return !q || p.hay.includes(q); }
+    function matchesPrice(p, price) {
+      if (price === "with") return p.prices.length > 0;
+      if (price === "without") return p.prices.length === 0;
+      return true;
+    }
+    function matchesCity(p, city) { return !city || p.city === city; }
+    function matchesRadius(p) {
+      if (!state.here || state.radius == null) return true;
+      if (p.lat == null || p.lng == null) return false;
+      return distanceKm(state.here, p) <= state.radius;
+    }
+    function matchesDone(p) {
+      if (state.done === "todo") return !isVisited(p);
+      if (state.done === "done") return isVisited(p);
+      return true;
+    }
+    function distanceKm(a, b) {
+      const R = 6371;
+      const dLat = (b.lat - a.lat) * Math.PI / 180;
+      const dLng = (b.lng - a.lng) * Math.PI / 180;
+      const s = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+      return 2 * R * Math.asin(Math.sqrt(s));
+    }
+    function mapsUrl(post) {
+      const dest = post.lat != null ? `${post.lat},${post.lng}` : [post.name, post.address, post.city !== "Ailleurs" ? post.city : "", "Maroc"].filter(Boolean).join(" ");
+      if (state.here) return `https://www.google.com/maps/dir/?api=1&origin=${state.here.lat},${state.here.lng}&destination=${encodeURIComponent(dest)}`;
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dest)}`;
+    }
+    function applyGeo(geo) {
+      state.geo = geo || {};
+      for (const p of state.posts) {
+        const hit = state.geo[p.geoKey];
+        p.lat = hit?.lat ?? null;
+        p.lng = hit?.lng ?? null;
+      }
+    }
+    function formatKm(km) {
+      if (km < 1) return `${Math.round(km * 1000)} m`;
+      return `${km.toFixed(km < 10 ? 1 : 0).replace(".", ",")} km`;
+    }
+    function visiblePosts() {
+      const q = searchQuery();
+      const filtered = state.posts.filter((p) => matchesCity(p, state.city) && matchesPrice(p, state.price) && matchesSearch(p, q) && matchesRadius(p) && matchesDone(p));
+      filtered.sort((a, b) => {
+        if (state.sort === "distance" && state.here) {
+          const da = a.lat == null ? Infinity : distanceKm(state.here, a);
+          const db = b.lat == null ? Infinity : distanceKm(state.here, b);
+          return da - db || a.seen - b.seen;
+        }
+        if (state.sort === "visits") return b.visits - a.visits || a.seen - b.seen;
+        return a.seen - b.seen;
+      });
+      return filtered;
+    }
+
+    function updateProgress() {
+      const scope = state.posts.filter((p) => matchesCity(p, state.city) && matchesPrice(p, state.price));
+      const spots = scope.filter(isVisited).length;
+      let dishes = 0;
+      for (const p of scope) dishes += eatenCount(p);
+      document.getElementById("prog-spots").textContent = `${spots}/${scope.length}`;
+      document.getElementById("prog-dishes").textContent = String(dishes);
+    }
+
+    function render() {
+      const filtered = visiblePosts();
+      const grid = document.getElementById("grid");
+      const empty = document.getElementById("empty");
+      grid.replaceChildren();
+      empty.hidden = filtered.length > 0;
+      const frag = document.createDocumentFragment();
+      for (const post of filtered) frag.appendChild(renderCard(post));
+      grid.appendChild(frag);
+      updateProgress();
+    }
+
+    function renderCard(post) {
+      const visited = isVisited(post);
+      const card = document.createElement("article");
+      card.dataset.key = post.geoKey;
+      if (visited) card.classList.add("done");
+      if (state.pick?.key === post.geoKey) card.classList.add("picked");
+
+      const cover = document.createElement("div");
+      cover.className = "cover";
+      const hue = coverHue(post);
+      cover.style.setProperty("--h", String(hue.h));
+      cover.style.setProperty("--h2", String(hue.h2));
+      const img = document.createElement("img");
+      img.src = coverFor(post);
+      img.alt = "";
+      img.loading = "lazy";
+      img.referrerPolicy = "no-referrer";
+      img.addEventListener("error", () => img.classList.add("fail"));
+      const mark = document.createElement("div");
+      mark.className = "cover-mark";
+      mark.innerHTML = ICO.check;
+      const grad = document.createElement("div");
+      grad.className = "cover-grad";
+      const top = document.createElement("div");
+      top.className = "cover-top";
+      const city = document.createElement("span");
+      city.className = "pill";
+      city.textContent = post.city;
+      top.appendChild(city);
+      if (post.visits > 1) {
+        const v = document.createElement("span");
+        v.className = "pill";
+        v.textContent = `${post.visits} posts`;
+        top.appendChild(v);
+      }
+      if (state.here && post.lat != null) {
+        const d = document.createElement("span");
+        d.className = "pill";
+        d.textContent = formatKm(distanceKm(state.here, post));
+        top.appendChild(d);
+      }
+      const visit = document.createElement("button");
+      visit.type = "button";
+      visit.className = "visit-btn";
+      visit.innerHTML = `<span class="ico">${ICO.check}</span><span>${visited ? "Visité" : "J’y suis allé"}</span>`;
+      visit.addEventListener("click", () => toggleVisited(post.geoKey));
+      const title = document.createElement("h2");
+      title.textContent = post.name;
+      if (ARABIC_RE.test(post.name)) title.dir = "rtl";
+      cover.append(img, mark, grad, top, visit, title);
+
+      const body = document.createElement("div");
+      body.className = "body";
+      if (post.address) {
+        const addr = document.createElement("p");
+        addr.className = "addr";
+        addr.textContent = post.address;
+        body.appendChild(addr);
+      }
+      if (post.prices.length) {
+        const meta = document.createElement("p");
+        meta.className = "meal-meta";
+        meta.textContent = `${eatenCount(post)}/${post.prices.length} plats goûtés`;
+        body.appendChild(meta);
+        const list = document.createElement("ul");
+        list.className = "menu";
+        for (const item of post.prices) {
+          const li = document.createElement("li");
+          li.dataset.dish = item.key;
+          if (isEaten(post, item)) li.classList.add("eaten");
+          if (state.pick?.key === post.geoKey && state.pick.dishes.includes(item.key)) li.classList.add("picked");
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "check";
+          btn.setAttribute("aria-pressed", isEaten(post, item) ? "true" : "false");
+          btn.innerHTML = `<span class="box">${ICO.check}</span>`;
+          btn.addEventListener("click", () => toggleDish(post.geoKey, item.key));
+          const dish = document.createElement("span");
+          dish.className = "dish";
+          dish.textContent = item.dish;
+          const price = document.createElement("span");
+          price.className = "price";
+          price.textContent = item.price;
+          li.append(btn, dish, price);
+          list.appendChild(li);
+        }
+        body.appendChild(list);
+      } else if (post.blurb) {
+        const blurb = document.createElement("p");
+        blurb.className = "addr";
+        blurb.textContent = post.blurb;
+        body.appendChild(blurb);
+      }
+      const foot = document.createElement("div");
+      foot.className = "foot";
+      const maps = document.createElement("a");
+      maps.href = mapsUrl(post);
+      maps.target = "_blank";
+      maps.rel = "noopener noreferrer";
+      maps.innerHTML = `<span class="ico">${ICO.map}</span>${state.here ? "Itinéraire" : "Maps"}`;
+      foot.appendChild(maps);
+      post.urls.slice(0, 3).forEach((url, i) => {
+        const a = document.createElement("a");
+        a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
+        a.innerHTML = `<span class="ico">${ICO.ig}</span>${post.urls.length === 1 ? "Instagram" : "Post " + (i + 1)}`;
+        foot.appendChild(a);
+      });
+      body.appendChild(foot);
+      card.append(cover, body);
+      return card;
+    }
+
+    function toggleVisited(key) {
+      const rec = spotState(key);
+      rec.visited = !rec.visited;
+      rec.visitedAt = rec.visited ? Date.now() : null;
+      saveProgress();
+      const card = document.querySelector(`article[data-key="${CSS.escape(key)}"]`);
+      if (card) {
+        card.classList.toggle("done", rec.visited);
+        const label = card.querySelector(".visit-btn span:last-child");
+        if (label) label.textContent = rec.visited ? "Visité" : "J’y suis allé";
+      }
+      updateProgress();
+      if (state.done !== "all") render();
+      toast(rec.visited ? "Resto coché" : "Visite retirée");
+    }
+
+    function toggleDish(key, dish) {
+      const rec = spotState(key);
+      rec.dishes[dish] = !rec.dishes[dish];
+      if (!rec.dishes[dish]) delete rec.dishes[dish];
+      saveProgress();
+      const card = document.querySelector(`article[data-key="${CSS.escape(key)}"]`);
+      if (card) {
+        const post = state.posts.find((p) => p.geoKey === key);
+        const meta = card.querySelector(".meal-meta");
+        if (post && meta) meta.textContent = `${eatenCount(post)}/${post.prices.length} plats goûtés`;
+        const items = [...card.querySelectorAll(".menu li")];
+        const idx = post.prices.findIndex((d) => d.key === dish);
+        if (items[idx]) {
+          items[idx].classList.toggle("eaten", Boolean(rec.dishes[dish]));
+          items[idx].querySelector(".check").setAttribute("aria-pressed", rec.dishes[dish] ? "true" : "false");
+        }
+      }
+      updateProgress();
+    }
+
+    function cityRank(name, posts) { return posts.filter((p) => p.city === name).length; }
+    function toast(message) {
+      const el = document.getElementById("toast");
+      el.textContent = message;
+      el.classList.add("show");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => el.classList.remove("show"), 1600);
+    }
+
+    function shuffle(list) {
+      const arr = [...list];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function pickRandom() {
+      const visible = visiblePosts();
+      if (!visible.length) return toast("Rien à tirer avec ces filtres");
+      const withMenu = visible.filter((p) => p.prices.length);
+      const todoMenu = withMenu.filter((p) => !isVisited(p));
+      let pool = todoMenu.length ? todoMenu : (withMenu.length ? withMenu : visible);
+      if (state.pick && pool.length > 1) {
+        const next = pool.filter((p) => p.geoKey !== state.pick.key);
+        if (next.length) pool = next;
+      }
+      const post = pool[Math.floor(Math.random() * pool.length)];
+      const uneaten = post.prices.filter((d) => !isEaten(post, d));
+      const dishes = uneaten.length ? uneaten : post.prices;
+      const count = dishes.length ? Math.min(dishes.length, 2 + Math.floor(Math.random() * 3)) : 0;
+      state.pick = { key: post.geoKey, dishes: shuffle(dishes).slice(0, count).map((d) => d.key) };
+      render();
+      showDraw(post);
+    }
+
+    function showDraw(post) {
+      const chosen = post.prices.filter((d) => state.pick.dishes.includes(d.key));
+      document.getElementById("draw-title").textContent = post.name;
+      document.getElementById("draw-addr").textContent = [post.address, post.city].filter(Boolean).join(" · ") || "Adresse à confirmer";
+      const list = document.getElementById("draw-dishes");
+      list.replaceChildren();
+      if (chosen.length) {
+        for (const item of chosen) {
+          const li = document.createElement("li");
+          const name = document.createElement("span");
+          name.textContent = item.dish;
+          const price = document.createElement("span");
+          price.className = "price";
+          price.textContent = item.price;
+          li.append(name, price);
+          list.appendChild(li);
+        }
+      } else {
+        const li = document.createElement("li");
+        li.textContent = "Pas de plat listé — va voir le resto.";
+        list.appendChild(li);
+      }
+      document.getElementById("draw-sheet").hidden = false;
+    }
+
+    function closeDraw(go) {
+      const sheet = document.getElementById("draw-sheet");
+      if (sheet.hidden) return;
+      sheet.hidden = true;
+      if (!go || !state.pick) return;
+      const card = document.querySelector(`article[data-key="${CSS.escape(state.pick.key)}"]`);
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function paintCities(cities) {
+      const menu = document.getElementById("city-menu");
+      const known = new Set(cities);
+      if (state.city && !known.has(state.city)) state.city = "Casablanca";
+      menu.replaceChildren();
+      for (const city of cities) {
+        if (city === "Ailleurs") continue;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "pin-option";
+        btn.dataset.value = city;
+        btn.setAttribute("aria-selected", city === state.city ? "true" : "false");
+        const name = document.createElement("span");
+        name.textContent = city;
+        const n = document.createElement("span");
+        n.className = "n";
+        n.textContent = cityRank(city, state.posts);
+        btn.append(name, n);
+        btn.addEventListener("click", () => chooseCity(city, city));
+        menu.appendChild(btn);
+      }
+      document.getElementById("city-label").textContent = state.city || "Casablanca";
+    }
+    const SELECTS = ["city", "near", "done", "price", "sort"];
+
+    function closeSelects(except) {
+      for (const name of SELECTS) {
+        if (name === except) continue;
+        document.getElementById(name + "-picker")?.classList.remove("open");
+        const menu = document.getElementById(name + "-menu");
+        if (menu) menu.hidden = true;
+      }
+    }
+    function placeMenu(name) {
+      const btn = document.getElementById(name + "-btn");
+      const menu = document.getElementById(name + "-menu");
+      const r = btn.getBoundingClientRect();
+      const width = Math.max(r.width, 220);
+      let left = r.left;
+      if (left + width > window.innerWidth - 12) left = Math.max(12, window.innerWidth - width - 12);
+      menu.style.top = `${Math.round(r.bottom + 8)}px`;
+      menu.style.left = `${Math.round(left)}px`;
+      menu.style.minWidth = `${Math.round(width)}px`;
+    }
+    function toggleSelect(name) {
+      const picker = document.getElementById(name + "-picker");
+      const menu = document.getElementById(name + "-menu");
+      const open = !picker.classList.contains("open");
+      closeSelects(open ? name : null);
+      picker.classList.toggle("open", open);
+      menu.hidden = !open;
+      if (open) placeMenu(name);
+    }
+    function fillSimpleMenu(menuId, items, current, onPick) {
+      const menu = document.getElementById(menuId);
+      menu.replaceChildren();
+      for (const item of items) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "pin-option";
+        btn.textContent = item.label;
+        btn.setAttribute("aria-selected", item.value === current ? "true" : "false");
+        btn.addEventListener("click", () => onPick(item.value, item.label));
+        menu.appendChild(btn);
+      }
+    }
+
+    function setMenuOpen(open) {
+      if (open) toggleSelect("city");
+      else closeSelects();
+    }
+    function chooseCity(value, label) {
+      state.city = value;
+      document.getElementById("city-label").textContent = label;
+      closeSelects();
+      render();
+    }
+    function paintNear() {
+      const items = state.here
+        ? [{ value: "off", label: "Sans rayon" }, ...[2, 5, 10, 20].map((km) => ({ value: String(km), label: `${km} km` }))]
+        : [{ value: "locate", label: "Utiliser ma position" }];
+      const current = state.here ? (state.radius == null ? "off" : String(state.radius)) : "";
+      fillSimpleMenu("near-menu", items, current, (value) => chooseNear(value));
+      document.getElementById("near-label").textContent = state.radius ? `${state.radius} km` : "Autour";
+    }
+    function setNearOpen(open) {
+      if (open) toggleSelect("near");
+      else closeSelects();
+    }
+    function chooseNear(value) {
+      closeSelects();
+      if (value === "locate") return locateHere();
+      state.radius = value === "off" ? null : Number(value);
+      paintNear();
+      render();
+    }
+    function paintDone() {
+      const items = [
+        { value: "all", label: "Statut" },
+        { value: "todo", label: "À faire" },
+        { value: "done", label: "Faits" }
+      ];
+      fillSimpleMenu("done-menu", items, state.done, (value, label) => {
+        state.done = value;
+        document.getElementById("done-label").textContent = label;
+        closeSelects();
+        render();
+      });
+      const cur = items.find((i) => i.value === state.done);
+      document.getElementById("done-label").textContent = cur ? cur.label : "Statut";
+    }
+    function paintPrice() {
+      const items = [
+        { value: "with", label: "Prix" },
+        { value: "without", label: "Sans prix" }
+      ];
+      fillSimpleMenu("price-menu", items, state.price, (value, label) => {
+        state.price = value;
+        document.getElementById("price-label").textContent = label;
+        closeSelects();
+        render();
+      });
+      document.getElementById("price-label").textContent = state.price === "without" ? "Sans prix" : "Prix";
+    }
+    function paintSort() {
+      const items = [
+        { value: "visits", label: "Visites" },
+        { value: "recent", label: "Récents" },
+        { value: "distance", label: "Distance" }
+      ];
+      fillSimpleMenu("sort-menu", items, state.sort, (value, label) => {
+        if (value === "distance" && !state.here) return locateHere();
+        state.sort = value;
+        document.getElementById("sort-label").textContent = label;
+        closeSelects();
+        render();
+      });
+      const cur = items.find((i) => i.value === state.sort);
+      document.getElementById("sort-label").textContent = cur ? cur.label : "Visites";
+    }
+    function locateHere() {
+      if (!navigator.geolocation) return toast("Géolocalisation indisponible");
+      toast("Recherche de ta position…");
+      navigator.geolocation.getCurrentPosition((pos) => {
+        state.here = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        state.sort = "distance";
+        paintNear();
+        paintSort();
+        render();
+        toast("Position OK — choisis un rayon");
+      }, () => toast("Position refusée"), { enableHighAccuracy: true, timeout: 10000 });
+    }
+
+    function setup(raw, { announce } = {}) {
+      state.posts = mergePosts(raw.map(parsePost));
+      applyGeo(state.geo);
+      const cities = [...new Set(state.posts.map((p) => p.city))]
+        .sort((a, b) => cityRank(b, state.posts) - cityRank(a, state.posts) || a.localeCompare(b, "fr"));
+      document.getElementById("boot").hidden = true;
+      document.getElementById("controls").hidden = false;
+      document.getElementById("stats").hidden = false;
+      paintCities(cities);
+      paintNear();
+      paintDone();
+      paintPrice();
+      paintSort();
+      render();
+      loadGeo();
+      if (!state.ready) {
+        for (const name of SELECTS) {
+          const menu = document.getElementById(name + "-menu");
+          document.body.appendChild(menu);
+        }
+        document.getElementById("q").addEventListener("input", () => render());
+        for (const name of SELECTS) {
+          document.getElementById(name + "-btn").addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleSelect(name);
+          });
+        }
+        document.addEventListener("click", (e) => {
+          if (e.target.closest(".pin-select") || e.target.closest(".pin-menu")) return;
+          closeSelects();
+        });
+        window.addEventListener("scroll", () => closeSelects(), true);
+        window.addEventListener("resize", () => closeSelects());
+        document.getElementById("btn-export").addEventListener("click", exportProgress);
+        document.getElementById("btn-import").addEventListener("click", () => document.getElementById("import-file").click());
+        document.getElementById("import-file").addEventListener("change", importProgress);
+        document.getElementById("btn-random").addEventListener("click", () => pickRandom());
+        document.getElementById("draw-again").addEventListener("click", () => pickRandom());
+        document.getElementById("draw-go").addEventListener("click", () => closeDraw(true));
+        document.getElementById("draw-sheet").addEventListener("click", (e) => {
+          if (e.target.id === "draw-sheet") closeDraw(false);
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeDraw(false);
+        });
+        document.getElementById("btn-logout").addEventListener("click", logout);
+        state.ready = true;
+      }
+      if (announce) toast("Guide mis à jour");
+    }
+
+    function exportProgress() {
+      const blob = new Blob([JSON.stringify(state.progress, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "9ossos-checklist.json";
+      a.click();
+      toast("Checklist exportée");
+    }
+    function importProgress(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!data.spots) throw new Error("format");
+          state.progress = data;
+          saveProgress();
+          render();
+          toast("Checklist importée");
+        } catch {
+          toast("Fichier invalide");
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    }
+
+    function showDrop(message) {
+      const boot = document.getElementById("boot");
+      boot.hidden = false;
+      boot.textContent = message;
+    }
+    function loadGeo() {
+      return fetch("geocodes.json?t=" + Date.now())
+        .then((res) => (res.ok ? res.json() : {}))
+        .then((geo) => { applyGeo(geo); if (state.posts.length) render(); })
+        .catch(() => {});
+    }
+    function loadData(announce) {
+      return fetch("restaurants.json?t=" + Date.now())
+        .then((res) => { if (!res.ok) throw new Error("missing"); return res.json(); })
+        .then((raw) => setup(raw, { announce }))
+        .catch(() => { if (!state.ready) showDrop("Lance npm start, puis ouvre http://localhost:3000"); });
+    }
+    function setLive() {}
+
+    document.getElementById("ico-search").innerHTML = ICO.search;
+    document.getElementById("ico-pin").innerHTML = ICO.pin;
+    document.getElementById("ico-near").innerHTML = ICO.near;
+    document.getElementById("btn-export").innerHTML = ICO.down;
+    document.getElementById("btn-import").innerHTML = ICO.up;
+    document.getElementById("btn-logout").innerHTML = ICO.out;
+    document.getElementById("btn-random").innerHTML = `<span class="ico">${ICO.dice}</span>Hasard`;
+    document.getElementById("btn-rand-user").innerHTML = `<span class="ico">${ICO.dice}</span>`;
+    document.getElementById("btn-rand-pass").innerHTML = `<span class="ico">${ICO.dice}</span>`;
+    setPeek("auth-pass", "btn-peek-login", false);
+    setPeek("reg-pass", "btn-peek-reg", false);
+
+    function setMode(mode) {
+      state.mode = mode;
+      const isLogin = mode === "login";
+      document.getElementById("tab-login").classList.toggle("on", isLogin);
+      document.getElementById("tab-register").classList.toggle("on", !isLogin);
+      document.getElementById("login-fields").hidden = !isLogin;
+      document.getElementById("register-fields").hidden = isLogin;
+      document.getElementById("auth-user").disabled = !isLogin;
+      document.getElementById("auth-pass").disabled = !isLogin;
+      document.getElementById("reg-user").disabled = isLogin;
+      document.getElementById("reg-pass").disabled = isLogin;
+      document.getElementById("auth-user").required = isLogin;
+      document.getElementById("auth-pass").required = isLogin;
+      document.getElementById("reg-user").required = !isLogin;
+      document.getElementById("reg-pass").required = !isLogin;
+      document.getElementById("auth-go").textContent = isLogin ? "Entrer" : "Créer mon carnet";
+      document.getElementById("auth-err").textContent = "";
+      setPeek("auth-pass", "btn-peek-login", false);
+      setPeek("reg-pass", "btn-peek-reg", false);
+      if (!isLogin) {
+        document.getElementById("reg-user").value = "";
+        document.getElementById("reg-pass").value = "";
+      }
+    }
+    function randFrom(list) {
+      const buf = new Uint32Array(1);
+      crypto.getRandomValues(buf);
+      return list[buf[0] % list.length];
+    }
+    function shuffleChars(chars) {
+      const arr = [...chars];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const buf = new Uint32Array(1);
+        crypto.getRandomValues(buf);
+        const j = buf[0] % (i + 1);
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr.join("");
+    }
+    function randomUsername() {
+      const words = ["tajine","kefta","harira","msemen","amlou","couscous","baghrir","zaatar","safran","olive","rfissa","sfenj","bissara","pastilla","mhajeb"];
+      return randFrom(words) + (10 + (crypto.getRandomValues(new Uint32Array(1))[0] % 90));
+    }
+    function randomPassword() {
+      const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+      const lower = "abcdefghijkmnopqrstuvwxyz";
+      const digits = "23456789";
+      const all = upper + lower + digits;
+      const extra = Array.from({ length: 9 }, () => randFrom(all));
+      return shuffleChars([randFrom(upper), randFrom(lower), randFrom(digits), ...extra].join(""));
+    }
+    function setPeek(inputId, btnId, show) {
+      const input = document.getElementById(inputId);
+      const btn = document.getElementById(btnId);
+      input.type = show ? "text" : "password";
+      btn.setAttribute("aria-pressed", show ? "true" : "false");
+      btn.title = show ? "Masquer le mot de passe" : "Afficher le mot de passe";
+      btn.setAttribute("aria-label", btn.title);
+      btn.innerHTML = `<span class="ico">${show ? ICO.eyeOff : ICO.eye}</span>`;
+    }
+    function togglePeek(inputId, btnId) {
+      setPeek(inputId, btnId, document.getElementById(inputId).type === "password");
+    }
+    async function logout() {
+      clearTimeout(queueSync.timer);
+      try { await syncProgress(); } catch {}
+      try { await api("POST", "/api/logout"); } catch {}
+      location.reload();
+    }
+    async function submitAuth(e) {
+      e.preventDefault();
+      const username = (state.mode === "register"
+        ? document.getElementById("reg-user")
+        : document.getElementById("auth-user")).value.trim();
+      const password = (state.mode === "register"
+        ? document.getElementById("reg-pass")
+        : document.getElementById("auth-pass")).value;
+      const err = document.getElementById("auth-err");
+      const btn = document.getElementById("auth-go");
+      err.textContent = "";
+      btn.disabled = true;
+      try {
+        const url = state.mode === "register" ? "/api/register" : "/api/login";
+        const payload = { username, password };
+        if (state.mode === "register") {
+          const draft = loadLocalProgress();
+          if (draft && draft.spots) payload.progress = draft;
+        }
+        const data = await api("POST", url, payload);
+        if (state.mode === "register") localStorage.removeItem(STORE_KEY);
+        enterApp(data.user, data.progress);
+      } catch (ex) {
+        err.textContent = ex.message || "Impossible de se connecter";
+      } finally {
+        btn.disabled = false;
+      }
+    }
+    async function boot() {
+      try {
+        const me = await api("GET", "/api/me");
+        if (me.user) return enterApp(me.user, me.progress);
+      } catch {
+        document.getElementById("auth-err").textContent = "Lance npm start, puis ouvre http://localhost:3000";
+      }
+    }
+
+    document.getElementById("tab-login").addEventListener("click", () => setMode("login"));
+    document.getElementById("tab-register").addEventListener("click", () => setMode("register"));
+    document.getElementById("auth-form").addEventListener("submit", submitAuth);
+    document.getElementById("btn-peek-login").addEventListener("click", () => togglePeek("auth-pass", "btn-peek-login"));
+    document.getElementById("btn-peek-reg").addEventListener("click", () => togglePeek("reg-pass", "btn-peek-reg"));
+    document.getElementById("btn-rand-user").addEventListener("click", () => {
+      document.getElementById("reg-user").value = randomUsername();
+      document.getElementById("reg-user").focus();
+    });
+    document.getElementById("btn-rand-pass").addEventListener("click", () => {
+      document.getElementById("reg-pass").value = randomPassword();
+      setPeek("reg-pass", "btn-peek-reg", true);
+      document.getElementById("reg-pass").focus();
+    });
+    window.addEventListener("pagehide", () => {
+      if (!state.user) return;
+      fetch("/api/checklist", {
+        method: "PUT",
+        credentials: "same-origin",
+        keepalive: true,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state.progress)
+      });
+    });
+
+    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+      const live = new EventSource("/__live");
+      live.addEventListener("reload", () => location.reload());
+      live.addEventListener("data", () => { if (state.user) loadData(true); });
+      live.addEventListener("geo", () => { if (state.user) loadGeo(); });
+    }
+    boot();
+  </script>
+</body>
+</html>
