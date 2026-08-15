@@ -273,6 +273,7 @@
       margin: 6px 0 8px;
     }
     .sheet .hint { color: var(--muted); font-size: 0.88rem; margin-bottom: 12px; }
+    .sheet .hint a { color: var(--gold); text-underline-offset: 3px; }
     .sheet ul { list-style: none; display: grid; gap: 8px; margin-bottom: 16px; }
     .sheet li {
       display: flex; justify-content: space-between; gap: 10px;
@@ -347,6 +348,13 @@
 
     .body { padding: 12px 14px 14px; display: grid; gap: 8px; }
     .addr { color: var(--muted); font-size: 0.82rem; }
+    a.addr {
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(224, 177, 92, 0.45);
+    }
+    a.addr:hover, a.addr:active { color: var(--gold); }
     .meal-meta { color: var(--gold); font-size: 0.72rem; font-weight: 600; }
 
     .menu { list-style: none; display: grid; gap: 0; max-height: 168px; overflow: auto; }
@@ -956,9 +964,15 @@
       return 2 * R * Math.asin(Math.sqrt(s));
     }
     function mapsUrl(post) {
-      const dest = post.lat != null ? `${post.lat},${post.lng}` : [post.name, post.address, post.city !== "Ailleurs" ? post.city : "", "Maroc"].filter(Boolean).join(" ");
+      const dest = post.lat != null ? `${post.lat},${post.lng}` : addressQuery(post);
       if (state.here) return `https://www.google.com/maps/dir/?api=1&origin=${state.here.lat},${state.here.lng}&destination=${encodeURIComponent(dest)}`;
       return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dest)}`;
+    }
+    function addressQuery(post) {
+      return [post.name, post.address, post.city !== "Ailleurs" ? post.city : "", "Maroc"].filter(Boolean).join(" ");
+    }
+    function addressSearchUrl(post) {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressQuery(post))}`;
     }
     function applyGeo(geo) {
       state.geo = geo || {};
@@ -1068,8 +1082,11 @@
       const body = document.createElement("div");
       body.className = "body";
       if (post.address) {
-        const addr = document.createElement("p");
+        const addr = document.createElement("a");
         addr.className = "addr";
+        addr.href = addressSearchUrl(post);
+        addr.target = "_blank";
+        addr.rel = "noopener noreferrer";
         addr.textContent = post.address;
         body.appendChild(addr);
       }
@@ -1212,7 +1229,19 @@
     function showDraw(post) {
       const chosen = post.prices.filter((d) => state.pick.dishes.includes(d.key));
       document.getElementById("draw-title").textContent = post.name;
-      document.getElementById("draw-addr").textContent = [post.address, post.city].filter(Boolean).join(" · ") || "Adresse à confirmer";
+      const addrEl = document.getElementById("draw-addr");
+      const label = [post.address, post.city].filter(Boolean).join(" · ") || "Adresse à confirmer";
+      addrEl.replaceChildren();
+      if (post.address) {
+        const a = document.createElement("a");
+        a.href = addressSearchUrl(post);
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = label;
+        addrEl.appendChild(a);
+      } else {
+        addrEl.textContent = label;
+      }
       const list = document.getElementById("draw-dishes");
       list.replaceChildren();
       if (chosen.length) {
