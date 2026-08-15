@@ -2,9 +2,8 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = __dirname;
-const PUBLIC = path.join(ROOT, "public");
-const OUT = path.join(PUBLIC, "geocodes.json");
-const RAW = JSON.parse(fs.readFileSync(path.join(PUBLIC, "restaurants.json"), "utf8"));
+const OUT = path.join(ROOT, "geocodes.json");
+const RAW = JSON.parse(fs.readFileSync(path.join(ROOT, "restaurants.json"), "utf8"));
 
 const CITIES = [
   "Casablanca", "Rabat", "Tanger", "Marrakech", "Agadir", "Fès", "Fes",
