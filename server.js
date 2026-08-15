@@ -5,13 +5,13 @@ const crypto = require("crypto");
 const { exec } = require("child_process");
 
 const ROOT = __dirname;
-const DATA = path.join(ROOT, "data");
+const PROD = process.env.NODE_ENV === "production" || Boolean(process.env.RENDER) || Boolean(process.env.VERCEL);
+const DATA = process.env.VERCEL ? path.join("/tmp", "9ossos-data") : path.join(ROOT, "data");
 const USERS_FILE = path.join(DATA, "users.json");
 const SESSIONS_FILE = path.join(DATA, "sessions.json");
 const LISTS_DIR = path.join(DATA, "checklists");
 const PORT = Number(process.env.PORT) || 3000;
 const SESSION_DAYS = 30;
-const PROD = process.env.NODE_ENV === "production" || Boolean(process.env.RENDER);
 const clients = new Set();
 
 const TYPES = {
@@ -170,6 +170,15 @@ function readBody(req, limit = 800000) {
 }
 
 async function readJsonBody(req) {
+  if (req.body && typeof req.body === "object" && !Buffer.isBuffer(req.body)) return req.body;
+  if (typeof req.body === "string" && req.body) {
+    try { return JSON.parse(req.body); }
+    catch {
+      const err = new Error("invalid json");
+      err.status = 400;
+      throw err;
+    }
+  }
   const raw = await readBody(req);
   if (!raw) return {};
   try { return JSON.parse(raw); }
@@ -335,13 +344,29 @@ function onChange(filename) {
 
 if (!PROD) fs.watch(ROOT, { recursive: true }, (_event, filename) => onChange(filename));
 
-server.listen(PORT, "0.0.0.0", () => {
-  const url = `http://localhost:${PORT}`;
-  console.log(`Listening on ${PORT}${PROD ? " (production)" : ""}`);
-  if (PROD) return;
-  const open =
-    process.platform === "win32" ? `start "" "${url}"` :
-    process.platform === "darwin" ? `open "${url}"` :
-    `xdg-open "${url}"`;
-  exec(open);
-});
+if (require.main === module && !process.env.VERCEL) {
+  server.listen(PORT, "0.0.0.0", () => {
+    const url = `http://localhost:${PORT}`;
+    console.log(`Listening on ${PORT}${PROD ? " (production)" : ""}`);
+    if (PROD) return;
+    const open =
+      process.platform === "win32" ? `start "" "${url}"` :
+      process.platform === "darwin" ? `open "${url}"` :
+      `xdg-open "${url}"`;
+    exec(open);
+  });
+}
+
+module.exports = async function vercelApi(req, res) {
+  try {
+    const slug = req.query && req.query.path;
+    if (slug && !String(req.url || "").startsWith("/api/")) {
+      const tail = Array.isArray(slug) ? slug.join("/") : String(slug);
+      req.url = "/api/" + tail + (String(req.url || "").includes("?") ? String(req.url).slice(req.url.indexOf("?")) : "");
+    }
+    await handleApi(req, res);
+  } catch (err) {
+    const status = err.status || 500;
+    sendJson(res, status, { error: status === 413 ? "Fichier trop volumineux" : err.message || "Erreur serveur" });
+  }
+};

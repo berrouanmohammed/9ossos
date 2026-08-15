@@ -417,5 +417,293 @@
   "malabata house|Casablanca": {
     "lat": null,
     "lng": null
+  },
+  "الهيبة، شارع الزرقطوني، الدار البيضاء|Casablanca": {
+    "lat": null,
+    "lng": null
+  },
+  "مطعم عندو 60 سنة فتح فرع جديد بشارع طانطان، بورگون، الدارالبيضاء|Casablanca": {
+    "lat": null,
+    "lng": null
+  },
+  "125 original|Mohammedia": {
+    "lat": null,
+    "lng": null
+  },
+  "achab agdal|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "achab harhoura|Harhoura": {
+    "lat": 33.9378375,
+    "lng": -6.939563,
+    "label": "Achab Harhoura, Avenue Moulay Abdellah, Grenade ⴳⵔⵏⴰⴷ غرناطة, Harhoura Centre ⵡⴰⵙⴰⵜ ⵏ ⵀⴰⵔⵀⵓⵔⴰ وسط الهرهورة, Harhoura ⵀⵔⵀⵓⵔⴰ هرهورة, Harhoura هرهورة, Pachalik de Harhoura, Préfecture de Skhirate-Témara عمالة الصخيرات-تمارة, Rabat-Salé-Kénitra ⵔⴱⴰⵟ-ⵙⵍⴰ-ⵇⵏⵉⵟⵔⴰ الرباط-سلا-القنيطرة, 12014, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "adam park hotel|Marrakech": {
+    "lat": 31.5966537,
+    "lng": -7.9894064,
+    "label": "Adam Park Hotel, Avenue du 7eme Art, Agdal, Zone Touristique de l'Agdal ⵜⴰⵎⵏⴰⴹⵜ ⵜⴰⵎⴰⵍⵍⴰⵢⴰⵏⵜ ⵏ ⵓⴳⴷⴰⵍ, Mechouar Kasbah المشور القصبة, Pachalik de Méchouar Kasba, Préfecture de Marrakech عمالة مراكش, Marrakech-Safi ⵎⵕⵕⴰⴽⵛ-ⴰⵙⴼⵉ مراكش-أسفي, 40035, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "addawk shami|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "afriquia village ville verte|Bouskoura": {
+    "lat": null,
+    "lng": null
+  },
+  "agha acham|Témara": {
+    "lat": 33.9345746,
+    "lng": -6.9429564,
+    "label": "Agha Acham, Avenue Moulay Abdellah, Guyville ⴳⵉⵢⵠⵉⵍ ݣيڤيل, Harhoura Centre ⵡⴰⵙⴰⵜ ⵏ ⵀⴰⵔⵀⵓⵔⴰ وسط الهرهورة, Harhoura هرهورة, Pachalik de Harhoura, Préfecture de Skhirate-Témara عمالة الصخيرات-تمارة, Rabat-Salé-Kénitra ⵔⴱⴰⵟ-ⵙⵍⴰ-ⵇⵏⵉⵟⵔⴰ الرباط-سلا-القنيطرة, 12014, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "agha cham|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "ostoura|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "allegro|Agadir": {
+    "lat": null,
+    "lng": null
+  },
+  "alor street food market|Ailleurs": {
+    "lat": null,
+    "lng": null
+  },
+  "american graffiti|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "annexe les mouflons|Marrakech": {
+    "lat": 31.1354572,
+    "lng": -7.9222538,
+    "label": "Annexe Les Mouflons, RP2015;RP2030, إمليل, Taourirt n'Ait Mizane, Imlil ⵉⵎⵍⵉⵍ إمليل, Asni ⴰⵙⵏⵉ أسني, Caïdat d'Asni, Cercle d'Asni, Province d'Al Haouz ⵜⴰⵙⴳⴰ ⵏ ⵍⵃⵓⵣ إقليم الحوز, Marrakech-Safi ⵎⵕⵕⴰⴽⵛ-ⴰⵙⴼⵉ مراكش-أسفي, 42152, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "arribat center|Rabat": {
+    "lat": 34.0033127,
+    "lng": -6.8449921,
+    "label": "Arribat Center الرباط سانتر, Rue Oued Souss زنقة واد سوس, Agdal ⴰⴳⴷⴰⵍ أكدال, Arrondissement Agdal-Riyad مقاطعة أكدال الرياض, Rabat ⵔⴱⴰⵟ الرباط, باشوية الرباط, Préfecture de Rabat عمالة الرباط, Rabat-Salé-Kénitra ⵔⴱⴰⵟ-ⵙⵍⴰ-ⵇⵏⵉⵟⵔⴰ الرباط-سلا-القنيطرة, 10080, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "assoufid golf club|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "atis club de tir benslimane|Ailleurs": {
+    "lat": null,
+    "lng": null
+  },
+  "au crabe|Oualidia": {
+    "lat": null,
+    "lng": null
+  },
+  "auberge oualidia dream|Oualidia": {
+    "lat": null,
+    "lng": null
+  },
+  "aux 3 portes|Tanger": {
+    "lat": 35.7894945,
+    "lng": -5.8146104,
+    "label": "Aux 3 Portes, Rue Riad Sultan, Kasbah, arrondissement de Tanger-Medina طنجة المدينة, Tanger طنجة, Pachalik de Tanger باشوية طنجة, Préfecture de Tanger-Assilah عمالة طنجة-أصيلة, Tanger-Tétouan-Al Hoceïma ⵟⴰⵏⵊ-ⵟⵉⵜⴰⵡⵉⵏ-ⵍⵃⵓⵙⵉⵎⴰ طنجة تطوان الحسيمة, 90030, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "baba turc|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "baba turc|Bouskoura": {
+    "lat": null,
+    "lng": null
+  },
+  "baci|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "banger|Bouskoura": {
+    "lat": null,
+    "lng": null
+  },
+  "barcelo palmeraie|Marrakech": {
+    "lat": 31.6612996,
+    "lng": -7.9335622,
+    "label": "Barceló Palmeraie, Djnan Abiad, Annakhil ⵏⴰⵅⵉⵍ النخيل, Arrondissement d'Annakhil مقاطعة النخيل, Marrakech ⵎⵕⵕⴰⴽⵯⵛ مراكش, Pachalik de Marrakech, Préfecture de Marrakech عمالة مراكش, Marrakech-Safi ⵎⵕⵕⴰⴽⵛ-ⴰⵙⴼⵉ مراكش-أسفي, 40007, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "barcelo tanger|Tanger": {
+    "lat": 35.7776402,
+    "lng": -5.8000028,
+    "label": "Barceló Hotel, Avenue Mohammed VI شارع محمد السادس, Bni Idder, arrondissement de Tanger-Medina طنجة المدينة, Tanger طنجة, Pachalik de Tanger باشوية طنجة, Préfecture de Tanger-Assilah عمالة طنجة-أصيلة, Tanger-Tétouan-Al Hoceïma ⵟⴰⵏⵊ-ⵟⵉⵜⴰⵡⵉⵏ-ⵍⵃⵓⵙⵉⵎⴰ طنجة تطوان الحسيمة, 90013, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "baristas|Mohammedia": {
+    "lat": 33.704587,
+    "lng": -7.3980198,
+    "label": "BARISTAS, Bd Mohamed Zerktouni, Mohammédia المحمدية, Pachalik de Mohammédia باشوية المحمدية, Préfecture de Mohammédia عمالة المحمدية, Casablanca-Settat ⵜⴰⴷⴷⴰⵔⵜ ⵜⵓⵎⵍⵉⵍⵜ-ⵙⵟⵟⴰⵜ الدار البيضاء-سطات, 20800, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "bawadi kech|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "bayt al assil|Aïn Atiq": {
+    "lat": null,
+    "lng": null
+  },
+  "be sushi|Ailleurs": {
+    "lat": null,
+    "lng": null
+  },
+  "beldi fusion kitchen|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "beldi fusion kitchen express|Tanger": {
+    "lat": null,
+    "lng": null
+  },
+  "besties bakery|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "bo bun|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "bocadillos|Témara": {
+    "lat": null,
+    "lng": null
+  },
+  "bocadillos riffi|Témara": {
+    "lat": null,
+    "lng": null
+  },
+  "bocadillos tangiers|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "bowling marrakech|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "brothers|Kénitra": {
+    "lat": null,
+    "lng": null
+  },
+  "brunch buffet a volonte a mohammedia|Mohammedia": {
+    "lat": null,
+    "lng": null
+  },
+  "brz|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "burger king|Ailleurs": {
+    "lat": null,
+    "lng": null
+  },
+  "burger les dalton|Dar Bouazza": {
+    "lat": null,
+    "lng": null
+  },
+  "cafe hafa|Tanger": {
+    "lat": 35.7914,
+    "lng": -5.8219757,
+    "label": "Café Hafa, La Corniche الكرنيش, Kasbah, arrondissement de Tanger-Medina طنجة المدينة, Tanger طنجة, Pachalik de Tanger باشوية طنجة, Préfecture de Tanger-Assilah عمالة طنجة-أصيلة, Tanger-Tétouan-Al Hoceïma ⵟⴰⵏⵊ-ⵟⵉⵜⴰⵡⵉⵏ-ⵍⵃⵓⵙⵉⵎⴰ طنجة تطوان الحسيمة, 90005, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "canelle|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "cap nature mazagan|El Jadida": {
+    "lat": null,
+    "lng": null
+  },
+  "carmens|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "casa marine restaurant badaoui|Mohammedia": {
+    "lat": null,
+    "lng": null
+  },
+  "casse croute|Mohammedia": {
+    "lat": null,
+    "lng": null
+  },
+  "chaouen tea|Témara": {
+    "lat": null,
+    "lng": null
+  },
+  "chef alsham|Tanger": {
+    "lat": null,
+    "lng": null
+  },
+  "chef karim|Oualidia": {
+    "lat": null,
+    "lng": null
+  },
+  "chef kunafa|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "cheikh fahd|Laâyoune": {
+    "lat": null,
+    "lng": null
+  },
+  "chez ali|Marrakech": {
+    "lat": 31.6196099,
+    "lng": -7.9849929,
+    "label": "Chez Ali, Place des Ferblantiers, Mechouar Kasbah ⵎⵉⵛⵡⴰⵔ ⵇⴰⵚⴱⴰ المشور القصبة, Medina ⵎⴷⵉⵏⴰ المدينة, Arrondissement de Marrakech-Medina مقاطعة مراكش المدينة, Marrakech ⵎⵕⵕⴰⴽⵯⵛ مراكش, Pachalik de Marrakech, Préfecture de Marrakech عمالة مراكش, Marrakech-Safi ⵎⵕⵕⴰⴽⵛ-ⴰⵙⴼⵉ مراكش-أسفي, 40040, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "chez ibrahim|Oualidia": {
+    "lat": null,
+    "lng": null
+  },
+  "chez rania|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "chickn beef|Tanger": {
+    "lat": null,
+    "lng": null
+  },
+  "chickos|Agadir": {
+    "lat": null,
+    "lng": null
+  },
+  "chiki wiki|Bouskoura": {
+    "lat": null,
+    "lng": null
+  },
+  "choco dream|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "choose|Kénitra": {
+    "lat": null,
+    "lng": null
+  },
+  "club de lagriculture|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "cooperative at|Marrakech": {
+    "lat": 32.2601665,
+    "lng": -8.9834704,
+    "label": "Cooperative, Bouguedra ⴱⵓⴳⴷⵔⴰ ثلاث بو كدرة, caïdat de El Ameur, cercle de Abda, Province de Safi إقليم أسفي, Marrakech-Safi ⵎⵕⵕⴰⴽⵛ-ⴰⵙⴼⵉ مراكش-أسفي, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "costa coffee|Bouskoura": {
+    "lat": null,
+    "lng": null
+  },
+  "costimar|Ailleurs": {
+    "lat": null,
+    "lng": null
+  },
+  "cottage oasis serenity|Ailleurs": {
+    "lat": null,
+    "lng": null
+  },
+  "crave|Mohammedia": {
+    "lat": null,
+    "lng": null
   }
 }

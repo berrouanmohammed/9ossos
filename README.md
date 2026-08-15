@@ -12,12 +12,9 @@ Ouvre [http://localhost:3000](http://localhost:3000).
 
 ## En ligne (gratuit, sans carte)
 
-Sur [Render](https://dashboard.render.com) :
+Sur [Vercel](https://vercel.com/new/import?s=https://github.com/berrouanmohammed/9ossos) :
 
-1. **New → Web Service**
-2. Relie le repo [berrouanmohammed/9ossos](https://github.com/berrouanmohammed/9ossos)
-3. Runtime **Node**, build `npm install`, start `npm start`
-4. Instance **Free** (pas Starter)
-5. **Deploy**
-
-N’utilise pas “Blueprint” : ça demande une carte bancaire.
+1. Connecte-toi avec GitHub (**berrouanmohammed**)
+2. Importe le repo **9ossos**
+3. Laisse les réglages par défaut, plan **Hobby**
+4. **Deploy**
