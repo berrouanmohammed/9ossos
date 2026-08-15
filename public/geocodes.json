@@ -705,5 +705,131 @@
   "crave|Mohammedia": {
     "lat": null,
     "lng": null
+  },
+  "crepes mtl|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "crusty|Rabat": {
+    "lat": 33.9918488,
+    "lng": -6.8833825,
+    "label": "Café Crusty, Avenue Mustapha Assayeh شارع مصطفى السايح, Yacoub El Mansour ⵢⴰⵄⵇⵓⴱ ⵍⵎⴰⵏⵙⵓⵔ يعقوب المنصور, Arrondissement Yacoub El Mansour مقاطعة يعقوب المنصور, Rabat ⵔⴱⴰⵟ الرباط, باشوية الرباط, Préfecture de Rabat عمالة الرباط, Rabat-Salé-Kénitra ⵔⴱⴰⵟ-ⵙⵍⴰ-ⵇⵏⵉⵟⵔⴰ الرباط-سلا-القنيطرة, 10053, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "cups coffee|Laâyoune": {
+    "lat": null,
+    "lng": null
+  },
+  "dahab|Ailleurs": {
+    "lat": 34.0422323,
+    "lng": -5.001813,
+    "label": "Dahab, Rue Arbi El Kaghat, Agdal ⴰⴳⴷⴰⵍ أكدال, Arrondissement d'Agdal مقاطعة أكدال, Fès ⴼⴰⵙ فاس, Pachalik du Fes باشوية فاس, Préfecture de Fès عمالة فاس, Fès-Meknès ⴼⴰⵙ-ⵎⴽⵏⴰⵙ فاس-مكناس, 30013, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "daisuki sushi|Mohammedia": {
+    "lat": null,
+    "lng": null
+  },
+  "dakhla club hotel spa|Dakhla": {
+    "lat": null,
+    "lng": null
+  },
+  "dakhla plaisance|Dakhla": {
+    "lat": null,
+    "lng": null
+  },
+  "danialand waterpark|Agadir": {
+    "lat": null,
+    "lng": null
+  },
+  "dar al achab|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "dar al fawakih|Rabat": {
+    "lat": 34.0203191,
+    "lng": -6.8438873,
+    "label": "Dar Al Fawakih, Avenue Maghreb Arabe شارع المغرب العربي, Océan ⵍⵎⵓⵃⵉⵟ المحيط, Arrondissement Hassan مقاطعة حسان, Rabat ⵔⴱⴰⵟ الرباط, باشوية الرباط, Préfecture de Rabat عمالة الرباط, Rabat-Salé-Kénitra ⵔⴱⴰⵟ-ⵙⵍⴰ-ⵇⵏⵉⵟⵔⴰ الرباط-سلا-القنيطرة, 10060, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "dar chams tanja|Tanger": {
+    "lat": 35.7876581,
+    "lng": -5.8120308,
+    "label": "Dar chams Tanja, Rue Bab El Assa, Jnan Kaptan, arrondissement de Tanger-Medina طنجة المدينة, Tanger طنجة, Pachalik de Tanger باشوية طنجة, Préfecture de Tanger-Assilah عمالة طنجة-أصيلة, Tanger-Tétouan-Al Hoceïma ⵟⴰⵏⵊ-ⵟⵉⵜⴰⵡⵉⵏ-ⵍⵃⵓⵙⵉⵎⴰ طنجة تطوان الحسيمة, 90030, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "dar da omar|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "dar el fellah|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "dar el ghazi|Témara": {
+    "lat": null,
+    "lng": null
+  },
+  "darhome|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "dasos|Bouskoura": {
+    "lat": null,
+    "lng": null
+  },
+  "dominos pizza|Bouskoura": {
+    "lat": null,
+    "lng": null
+  },
+  "donabo botanical gardens|Tanger": {
+    "lat": null,
+    "lng": null
+  },
+  "du nouveau a rabat crusty ouvre officiellement son nouveau point de vente a agdal|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "dulcita|Tanger": {
+    "lat": null,
+    "lng": null
+  },
+  "dunkin|Bouskoura": {
+    "lat": null,
+    "lng": null
+  },
+  "bayt el dimashki|Rabat": {
+    "lat": null,
+    "lng": null
+  },
+  "enfaim|Agadir": {
+    "lat": null,
+    "lng": null
+  },
+  "espace bladna|Ailleurs": {
+    "lat": null,
+    "lng": null
+  },
+  "espressor|Mohammedia": {
+    "lat": null,
+    "lng": null
+  },
+  "extra tasty|Marrakech": {
+    "lat": null,
+    "lng": null
+  },
+  "fairmont la marina rabat sale|Rabat": {
+    "lat": 34.0326366,
+    "lng": -6.8290035,
+    "label": "Fairmont La Marina, Avenue Fes شارع فاس, Bab Al Bahr, Bab Lamrissa باب لمريسة, Salé سلا, باشوية سلا, Préfecture de Salé عمالة سلا, Rabat-Salé-Kénitra ⵔⴱⴰⵟ-ⵙⵍⴰ-ⵇⵏⵉⵟⵔⴰ الرباط-سلا-القنيطرة, 11005, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "fairmont royal palm|Marrakech": {
+    "lat": 31.5132487,
+    "lng": -8.0519054,
+    "label": "Fairmont Royal Palm Marrakesh, RP2009, Dar El ain, Tameslouht ⵜⴰⵎⵚⵍⵓⵃⵜ تمصلوحت, caïdat de Tameslouhte, Cercle de Tahannaout دائرة تحناوت, Province d'Al Haouz ⵜⴰⵙⴳⴰ ⵏ ⵍⵃⵓⵣ إقليم الحوز, Marrakech-Safi ⵎⵕⵕⴰⴽⵛ-ⴰⵙⴼⵉ مراكش-أسفي, 42312, Maroc ⵍⵎⵖⵔⵉⴱ المغرب"
+  },
+  "fantasy park|Mohammedia": {
+    "lat": null,
+    "lng": null
+  },
+  "fifties diner|Rabat": {
+    "lat": null,
+    "lng": null
   }
 }

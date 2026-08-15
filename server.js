@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const { exec } = require("child_process");
 
 const ROOT = __dirname;
+const PUBLIC = path.join(ROOT, "public");
 const PROD = process.env.NODE_ENV === "production" || Boolean(process.env.RENDER) || Boolean(process.env.VERCEL);
 const DATA = process.env.VERCEL ? path.join("/tmp", "9ossos-data") : path.join(ROOT, "data");
 const USERS_FILE = path.join(DATA, "users.json");
@@ -274,9 +275,8 @@ async function handleApi(req, res) {
 
 function safePath(urlPath) {
   const decoded = decodeURIComponent(urlPath.split("?")[0]);
-  const resolved = path.resolve(ROOT, "." + decoded);
-  if (!resolved.startsWith(ROOT)) return null;
-  if (resolved === DATA || resolved.startsWith(DATA + path.sep)) return null;
+  const resolved = path.resolve(PUBLIC, "." + decoded);
+  if (!resolved.startsWith(PUBLIC)) return null;
   return resolved;
 }
 
@@ -342,7 +342,7 @@ function onChange(filename) {
   }, 120);
 }
 
-if (!PROD) fs.watch(ROOT, { recursive: true }, (_event, filename) => onChange(filename));
+if (!PROD) fs.watch(PUBLIC, { recursive: true }, (_event, filename) => onChange(filename));
 
 if (require.main === module && !process.env.VERCEL) {
   server.listen(PORT, "0.0.0.0", () => {
@@ -357,16 +357,4 @@ if (require.main === module && !process.env.VERCEL) {
   });
 }
 
-module.exports = async function vercelApi(req, res) {
-  try {
-    const slug = req.query && req.query.path;
-    if (slug && !String(req.url || "").startsWith("/api/")) {
-      const tail = Array.isArray(slug) ? slug.join("/") : String(slug);
-      req.url = "/api/" + tail + (String(req.url || "").includes("?") ? String(req.url).slice(req.url.indexOf("?")) : "");
-    }
-    await handleApi(req, res);
-  } catch (err) {
-    const status = err.status || 500;
-    sendJson(res, status, { error: status === 413 ? "Fichier trop volumineux" : err.message || "Erreur serveur" });
-  }
-};
+module.exports = { handleApi };
