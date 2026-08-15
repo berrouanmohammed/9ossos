@@ -663,6 +663,7 @@
     ];
     const ARABIC_RE = /[\u0600-\u06FF]/;
     const STORE_KEY = "9ossos-progress-v1";
+    const VAULT_KEY = "9ossos-vault-v1";
     const FOOD_GENRES = [
       { id: "marocain", label: "Marocain", re: /tajine|tanjya|tangia|couscous|kefta|beldi|rfissa|pastilla|mrouzia|harira|msemen|amlou|mechoui|tanji?a/ },
       { id: "sushi", label: "Sushi / Asie", re: /sushi|maki|sashimi|poke|ramen|yakitori|jap|tha[iï]|pad thai|wok|nems|gyoza|bao/ },
@@ -793,12 +794,65 @@
     function cacheKey() {
       return state.user ? `${STORE_KEY}:${state.user.toLowerCase()}` : STORE_KEY;
     }
+    function loadVault() {
+      try { return JSON.parse(localStorage.getItem(VAULT_KEY)) || { users: {}, lists: {} }; }
+      catch { return { users: {}, lists: {} }; }
+    }
+    function saveVault(vault) {
+      localStorage.setItem(VAULT_KEY, JSON.stringify(vault));
+    }
+    function randomSalt() {
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+    }
+    async function hashLocal(password, saltHex) {
+      const salt = Uint8Array.from(saltHex.match(/../g).map((h) => parseInt(h, 16)));
+      const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+      const bits = await crypto.subtle.deriveBits(
+        { name: "PBKDF2", salt, iterations: 120000, hash: "SHA-256" },
+        key,
+        256
+      );
+      return Array.from(new Uint8Array(bits), (b) => b.toString(16).padStart(2, "0")).join("");
+    }
+    async function vaultSave(username, password, progress) {
+      const id = username.toLowerCase();
+      const vault = loadVault();
+      const salt = randomSalt();
+      vault.users[id] = { name: username, salt, hash: await hashLocal(password, salt) };
+      if (progress) vault.lists[id] = progress;
+      vault.last = username;
+      saveVault(vault);
+    }
+    async function vaultLogin(username, password) {
+      const id = username.toLowerCase();
+      const vault = loadVault();
+      const rec = vault.users[id];
+      if (!rec) return null;
+      if (rec.hash !== await hashLocal(password, rec.salt)) return null;
+      return { user: rec.name || username, progress: vault.lists[id] || { spots: {} } };
+    }
+    function localProgressFor(username) {
+      const id = username.toLowerCase();
+      const vault = loadVault();
+      if (vault.lists[id] && vault.lists[id].spots) return vault.lists[id];
+      try {
+        const cached = JSON.parse(localStorage.getItem(`${STORE_KEY}:${id}`));
+        if (cached && cached.spots) return cached;
+      } catch {}
+      return loadLocalProgress();
+    }
     function loadLocalProgress() {
       try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; }
       catch { return null; }
     }
     function saveProgress() {
-      if (state.user) localStorage.setItem(cacheKey(), JSON.stringify(state.progress));
+      if (!state.user) return;
+      localStorage.setItem(cacheKey(), JSON.stringify(state.progress));
+      const vault = loadVault();
+      vault.lists[state.user.toLowerCase()] = state.progress;
+      saveVault(vault);
       queueSync();
     }
     function queueSync() {
@@ -1546,17 +1600,40 @@
       const btn = document.getElementById("auth-go");
       err.textContent = "";
       btn.disabled = true;
+      const payload = { username, password };
+      const localProg = localProgressFor(username);
+      if (localProg && localProg.spots) payload.progress = localProg;
       try {
         const url = state.mode === "register" ? "/api/register" : "/api/login";
-        const payload = { username, password };
-        if (state.mode === "register") {
-          const draft = loadLocalProgress();
-          if (draft && draft.spots) payload.progress = draft;
+        let data;
+        try {
+          data = await api("POST", url, payload);
+        } catch (ex) {
+          if (state.mode !== "login") throw ex;
+          const local = await vaultLogin(username, password);
+          if (local) payload.progress = local.progress;
+          try {
+            data = await api("POST", "/api/register", payload);
+          } catch (regErr) {
+            if (local && /déjà pris/i.test(regErr.message || "")) {
+              enterApp(local.user, local.progress);
+              return;
+            }
+            throw ex;
+          }
         }
-        const data = await api("POST", url, payload);
+        await vaultSave(username, password, data.progress);
         if (state.mode === "register") localStorage.removeItem(STORE_KEY);
         enterApp(data.user, data.progress);
       } catch (ex) {
+        try {
+          const local = await vaultLogin(username, password);
+          if (local) {
+            await vaultSave(username, password, local.progress);
+            enterApp(local.user, local.progress);
+            return;
+          }
+        } catch {}
         err.textContent = ex.message || "Impossible de se connecter";
       } finally {
         btn.disabled = false;
@@ -1567,7 +1644,13 @@
         const me = await api("GET", "/api/me");
         if (me.user) return enterApp(me.user, me.progress);
       } catch {
-        document.getElementById("auth-err").textContent = "Lance npm start, puis ouvre http://localhost:3000";
+        if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+          document.getElementById("auth-err").textContent = "Lance npm start, puis ouvre http://localhost:3000";
+        }
+      }
+      const last = loadVault().last;
+      if (last && !document.getElementById("auth-user").value) {
+        document.getElementById("auth-user").value = last;
       }
     }
 
@@ -1610,6 +1693,7 @@
       document.getElementById("btn-install-gate").hidden = !show;
     }
     async function installApp() {
+      closeAcc();
       if (!installEvent) return;
       installEvent.prompt();
       await installEvent.userChoice;
