@@ -22,10 +22,10 @@ const TYPES = {
 
 function safePath(urlPath) {
   const decoded = decodeURIComponent(urlPath.split("?")[0]);
-  const resolved = path.resolve(ROOT, "." + decoded);
-  if (!resolved.startsWith(ROOT)) return null;
-  if (resolved.includes(`${path.sep}data${path.sep}`) || resolved.endsWith(`${path.sep}data`)) return null;
-  return resolved;
+  if (decoded === "/" || decoded === "/index.html") return path.join(ROOT, "index.html");
+  if (decoded === "/restaurants.json") return path.join(ROOT, "restaurants.json");
+  if (decoded === "/geocodes.json") return path.join(ROOT, "geocodes.json");
+  return null;
 }
 
 const server = http.createServer(async (req, res) => {
@@ -47,7 +47,14 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    let filePath = safePath(req.url === "/" ? "/index.html" : req.url);
+    const urlPath = String(req.url || "/").split("?")[0];
+    if (urlPath === "/favicon.ico" || urlPath === "/favicon.png") {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+
+    let filePath = safePath(urlPath);
     if (!filePath) return send(res, 403, "Forbidden");
 
     fs.stat(filePath, (err, stat) => {
@@ -103,3 +110,7 @@ if (require.main === module) {
     exec(open);
   });
 }
+
+module.exports = (req, res) => {
+  server.emit("request", req, res);
+};
