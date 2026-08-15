@@ -513,6 +513,13 @@
           </button>
           <div class="pin-menu" id="city-menu" hidden></div>
         </div>
+        <div class="pin-select" id="genre-picker">
+          <button type="button" class="pin-trigger" id="genre-btn" aria-haspopup="listbox" aria-expanded="false">
+            <span class="ico" id="ico-food"></span>
+            <span id="genre-label">Cuisine</span>
+          </button>
+          <div class="pin-menu" id="genre-menu" hidden></div>
+        </div>
         <div class="pin-select near" id="near-picker">
           <button type="button" class="pin-trigger" id="near-btn" aria-haspopup="listbox" aria-expanded="false">
             <span class="ico" id="ico-near"></span>
@@ -573,6 +580,7 @@
       dice: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><circle cx="16" cy="8" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="8" cy="16" r="1.2" fill="currentColor"/><circle cx="16" cy="16" r="1.2" fill="currentColor"/></svg>',
       out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 7V5a2 2 0 0 1 2-2h7v18h-7a2 2 0 0 1-2-2v-2"/><path d="M15 12H3m0 0 3-3M3 12l3 3"/></svg>',
       install: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M5 19h14"/></svg>',
+      food: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v18M6 3c0 3 2 3.2 2 7M10 3c0 3-2 3.2-2 7M16 3v7a2.5 2.5 0 0 1-2.5 2.5V21M16 3h2.5v6H16"/></svg>',
       eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
       eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.5 10.7a3 3 0 0 0 4.1 4.1M9.9 5.2A11 11 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-4.2 4.8M6.1 6.6C3.5 8.5 2 12 2 12s3.5 7 10 7c1.6 0 3-.3 4.3-.8"/></svg>',
     };
@@ -632,6 +640,28 @@
     ];
     const ARABIC_RE = /[\u0600-\u06FF]/;
     const STORE_KEY = "9ossos-progress-v1";
+    const FOOD_GENRES = [
+      { id: "marocain", label: "Marocain", re: /tajine|tanjya|tangia|couscous|kefta|beldi|rfissa|pastilla|mrouzia|harira|msemen|amlou|mechoui|tanji?a/ },
+      { id: "sushi", label: "Sushi / Asie", re: /sushi|maki|sashimi|poke|ramen|yakitori|jap|tha[iï]|pad thai|wok|nems|gyoza|bao/ },
+      { id: "pizza", label: "Pizza", re: /pizza|trattoria|napoli|italiano/ },
+      { id: "burger", label: "Burger", re: /burger|smash/ },
+      { id: "tacos", label: "Tacos", re: /tacos|burrito/ },
+      { id: "pasta", label: "Pâtes", re: /p[âa]tes|pasta|tagliatelle|spaghetti|risotto|lasagne/ },
+      { id: "grill", label: "Grillades", re: /steak|entrec[oô]te|grillade|brochette|kebab|d[oö]ner|grill|c[oô]te de/ },
+      { id: "seafood", label: "Poisson", re: /crevette|poisson|seafood|paella|calamar|gambas|fish|anchois|saumon/ },
+      { id: "chicken", label: "Poulet", re: /poulet|chicken|djaj|wings|pilon/ },
+      { id: "sandwich", label: "Sandwich", re: /sandwich|panini|shawarma|chawarma|bocadillo/ },
+      { id: "cafe", label: "Café / Brunch", re: /caf[eé]|latte|matcha|coffee|brunch|petit dej|petit-d[eé]j|breakfast|th[eé] / },
+      { id: "dessert", label: "Dessert", re: /glace|ice cream|sundae|tiramisu|cheesecake|chocolat|dessert|kunafa|p[âa]tisserie|donut|cr[eê]pe|gaufre|pancake|pastry|cookie|flan/ },
+      { id: "healthy", label: "Healthy", re: /healthy|salade|bowl|quinoa|fitness|smoothie|poke bowl/ }
+    ];
+    const GENRE_LABEL = Object.fromEntries(FOOD_GENRES.map((g) => [g.id, g.label]));
+    GENRE_LABEL.other = "Autre";
+    const COVER_BY_GENRE = {
+      marocain: "tajine", sushi: "sushi", pizza: "pizza", burger: "burger", tacos: "tacos",
+      pasta: "pasta", grill: "steak", seafood: "seafood", chicken: "chicken", sandwich: "sandwich",
+      cafe: "cafe", dessert: "dessert", healthy: "cafe", other: "table"
+    };
 
     function clean(text) {
       return (text || "").replace(/[\u2066-\u2069\u202A-\u202E\u200E\u200F]/g, "").replace(/\s+/g, " ").trim();
@@ -702,33 +732,24 @@
       return [...groups.entries()].map(([key, group], i) => {
         const newest = group[0];
         const prices = mergePrices(group);
+        const address = group.map((g) => g.address).sort((a, b) => b.length - a.length)[0] || "";
+        const blurb = prices.length ? "" : ([...new Set(group.map((g) => g.blurb).filter(Boolean))][0] || "");
+        const genre = detectGenre({ name: newest.name, prices, blurb, address });
         return {
-          name: newest.name, named: newest.named,
-          address: group.map((g) => g.address).sort((a, b) => b.length - a.length)[0] || "",
-          city: newest.city, prices,
-          blurb: prices.length ? "" : ([...new Set(group.map((g) => g.blurb).filter(Boolean))][0] || ""),
+          name: newest.name, named: newest.named, address, city: newest.city, prices, blurb,
           urls: [...new Set(group.map((g) => g.url))], visits: group.length, seen: i,
-          geoKey: key, lat: null, lng: null, hay: group.map((g) => g.hay).join(" ")
+          geoKey: key, lat: null, lng: null, genre,
+          hay: [group.map((g) => g.hay).join(" "), GENRE_LABEL[genre] || ""].join(" ").toLowerCase()
         };
       });
     }
+    function detectGenre(post) {
+      const hay = [post.name, post.address, post.blurb, ...(post.prices || []).map((p) => p.dish)].join(" ").toLowerCase();
+      for (const g of FOOD_GENRES) if (g.re.test(hay)) return g.id;
+      return "other";
+    }
     function coverKind(post) {
-      const hay = (post.name + " " + post.prices.map((p) => p.dish).join(" ")).toLowerCase();
-      if (/sushi|maki|sashimi|poke|ramen|yakitori|jap/.test(hay)) return "sushi";
-      if (/pizza|trattoria|napoli|italiano/.test(hay)) return "pizza";
-      if (/burger|smash|bun/.test(hay)) return "burger";
-      if (/tacos|burrito/.test(hay)) return "tacos";
-      if (/p[âa]tes|pasta|tagliatelle|spaghetti|risotto/.test(hay)) return "pasta";
-      if (/steak|entrec[oô]te|c[oô]te|grillade|viande/.test(hay)) return "steak";
-      if (/crevette|poisson|seafood|paella|calamar|gambas|fish/.test(hay)) return "seafood";
-      if (/poulet|chicken|djaj|wings/.test(hay)) return "chicken";
-      if (/tajine|tanjya|couscous|kefta|beldi/.test(hay)) return "tajine";
-      if (/glace|ice|sundae|tiramisu|cheesecake|chocolat|dessert|kunafa/.test(hay)) return "dessert";
-      if (/caf[eé]|latte|matcha|coffee/.test(hay)) return "cafe";
-      if (/cr[eê]pe|gaufre|pancake|donut|pastry/.test(hay)) return "pastry";
-      if (/sandwich|panini|shawarma|chawarma/.test(hay)) return "sandwich";
-      if (/grill|brochette|kebab|d[oö]ner/.test(hay)) return "grill";
-      return "table";
+      return COVER_BY_GENRE[post.genre || detectGenre(post)] || "table";
     }
     function coverFor(post) {
       return COVERS[coverKind(post)] || COVERS.table;
@@ -740,7 +761,7 @@
     }
 
     const state = {
-      posts: [], city: "Casablanca", price: "with", sort: "visits", done: "all",
+      posts: [], city: "Casablanca", price: "with", sort: "visits", done: "all", genre: "",
       here: null, radius: null, geo: {}, ready: false,
       pick: null, user: null, mode: "login",
       progress: { spots: {} }
@@ -807,6 +828,7 @@
       if (p.lat == null || p.lng == null) return false;
       return distanceKm(state.here, p) <= state.radius;
     }
+    function matchesGenre(p, genre) { return !genre || p.genre === genre; }
     function matchesDone(p) {
       if (state.done === "todo") return !isVisited(p);
       if (state.done === "done") return isVisited(p);
@@ -838,7 +860,7 @@
     }
     function visiblePosts() {
       const q = searchQuery();
-      const filtered = state.posts.filter((p) => matchesCity(p, state.city) && matchesPrice(p, state.price) && matchesSearch(p, q) && matchesRadius(p) && matchesDone(p));
+      const filtered = state.posts.filter((p) => matchesCity(p, state.city) && matchesPrice(p, state.price) && matchesGenre(p, state.genre) && matchesSearch(p, q) && matchesRadius(p) && matchesDone(p));
       filtered.sort((a, b) => {
         if (state.sort === "distance" && state.here) {
           const da = a.lat == null ? Infinity : distanceKm(state.here, a);
@@ -852,7 +874,7 @@
     }
 
     function updateProgress() {
-      const scope = state.posts.filter((p) => matchesCity(p, state.city) && matchesPrice(p, state.price));
+      const scope = state.posts.filter((p) => matchesCity(p, state.city) && matchesPrice(p, state.price) && matchesGenre(p, state.genre));
       const spots = scope.filter(isVisited).length;
       let dishes = 0;
       for (const p of scope) dishes += eatenCount(p);
@@ -901,6 +923,12 @@
       city.className = "pill";
       city.textContent = post.city;
       top.appendChild(city);
+      if (post.genre && post.genre !== "other") {
+        const g = document.createElement("span");
+        g.className = "pill";
+        g.textContent = GENRE_LABEL[post.genre] || post.genre;
+        top.appendChild(g);
+      }
       if (post.visits > 1) {
         const v = document.createElement("span");
         v.className = "pill";
@@ -1114,7 +1142,7 @@
       }
       document.getElementById("city-label").textContent = state.city || "Casablanca";
     }
-    const SELECTS = ["city", "near", "done", "price", "sort"];
+    const SELECTS = ["city", "genre", "near", "done", "price", "sort"];
 
     function closeSelects(except) {
       for (const name of SELECTS) {
@@ -1187,6 +1215,34 @@
       paintNear();
       render();
     }
+    function paintGenre() {
+      const menu = document.getElementById("genre-menu");
+      const counts = {};
+      for (const p of state.posts) counts[p.genre] = (counts[p.genre] || 0) + 1;
+      const ids = ["", ...FOOD_GENRES.map((g) => g.id), "other"].filter((id, i, arr) => i === 0 || counts[id]);
+      if (state.genre && !ids.includes(state.genre)) state.genre = "";
+      menu.replaceChildren();
+      for (const id of ids) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "pin-option";
+        btn.setAttribute("aria-selected", id === state.genre ? "true" : "false");
+        const name = document.createElement("span");
+        name.textContent = id ? GENRE_LABEL[id] : "Cuisine";
+        const n = document.createElement("span");
+        n.className = "n";
+        n.textContent = id ? String(counts[id] || 0) : String(state.posts.length);
+        btn.append(name, n);
+        btn.addEventListener("click", () => {
+          state.genre = id;
+          document.getElementById("genre-label").textContent = id ? GENRE_LABEL[id] : "Cuisine";
+          closeSelects();
+          render();
+        });
+        menu.appendChild(btn);
+      }
+      document.getElementById("genre-label").textContent = state.genre ? GENRE_LABEL[state.genre] : "Cuisine";
+    }
     function paintDone() {
       const items = [
         { value: "all", label: "Statut" },
@@ -1253,6 +1309,7 @@
       document.getElementById("controls").hidden = false;
       document.getElementById("stats").hidden = false;
       paintCities(cities);
+      paintGenre();
       paintNear();
       paintDone();
       paintPrice();
@@ -1345,6 +1402,7 @@
 
     document.getElementById("ico-search").innerHTML = ICO.search;
     document.getElementById("ico-pin").innerHTML = ICO.pin;
+    document.getElementById("ico-food").innerHTML = ICO.food;
     document.getElementById("ico-near").innerHTML = ICO.near;
     document.getElementById("btn-export").innerHTML = ICO.down;
     document.getElementById("btn-import").innerHTML = ICO.up;
