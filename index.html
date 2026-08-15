@@ -71,23 +71,36 @@
     }
     .logo em { color: var(--gold); font-style: italic; font-weight: 500; }
     .tagline { color: var(--muted); margin-top: 8px; font-size: 0.92rem; max-width: 36ch; }
-    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
-    .user-chip {
-      display: flex; align-items: center; gap: 6px;
-      max-width: 140px;
-      padding: 0 4px 0 12px;
+    .header-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .acc { position: relative; }
+    .acc-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      z-index: 40;
+      min-width: 220px;
+      padding: 8px;
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 12px;
-      min-height: 42px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
     }
-    .user-chip span {
-      font-size: 0.82rem; font-weight: 600;
+    .acc-menu[hidden] { display: none; }
+    .acc-who {
+      padding: 8px 12px 10px;
+      font-size: 0.82rem; font-weight: 700; color: var(--gold);
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 6px;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
-    .user-chip .icon-btn {
-      width: 34px; height: 34px; border: 0; background: transparent;
+    .acc-menu button {
+      width: 100%; display: flex; align-items: center; gap: 10px;
+      border: 0; background: transparent; padding: 11px 12px; border-radius: 10px;
+      cursor: pointer; text-align: left; font-weight: 600; font-size: 0.9rem;
     }
+    .acc-menu button:hover { background: rgba(224, 177, 92, 0.12); }
+    .acc-menu button .ico { color: var(--gold); }
+    .acc.open .acc-btn { background: var(--gold); color: #1a140c; border-color: var(--gold); }
     .icon-btn {
       width: 42px; height: 42px;
       display: grid; place-items: center;
@@ -483,14 +496,17 @@
           <p class="tagline">Ton carnet de visites : coche les restos et les plats déjà goûtés.</p>
         </div>
         <div class="header-actions">
-          <button class="icon-btn" id="btn-install" type="button" title="Installer l’app" aria-label="Installer l’app" hidden></button>
-          <div class="user-chip">
-            <span id="user-name"></span>
-            <button class="icon-btn" id="btn-logout" type="button" title="Déconnexion" aria-label="Déconnexion"></button>
-          </div>
           <button class="icon-btn random-btn" id="btn-random" type="button" aria-label="Choisir un resto au hasard">Hasard</button>
-          <button class="icon-btn" id="btn-export" title="Exporter" aria-label="Exporter la checklist"></button>
-          <button class="icon-btn" id="btn-import" title="Importer" aria-label="Importer la checklist"></button>
+          <div class="acc" id="acc">
+            <button class="icon-btn acc-btn" id="acc-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Menu"></button>
+            <div class="acc-menu" id="acc-menu" hidden role="menu">
+              <div class="acc-who" id="user-name"></div>
+              <button type="button" id="btn-install" hidden></button>
+              <button type="button" id="btn-export"></button>
+              <button type="button" id="btn-import"></button>
+              <button type="button" id="btn-logout"></button>
+            </div>
+          </div>
           <input id="import-file" type="file" accept="application/json,.json" hidden />
         </div>
       </div>
@@ -529,18 +545,21 @@
         </div>
         <div class="pin-select" id="done-picker">
           <button type="button" class="pin-trigger" id="done-btn">
+            <span class="ico" id="ico-done"></span>
             <span id="done-label">Statut</span>
           </button>
           <div class="pin-menu" id="done-menu" hidden></div>
         </div>
         <div class="pin-select" id="price-picker">
           <button type="button" class="pin-trigger" id="price-btn">
+            <span class="ico" id="ico-price"></span>
             <span id="price-label">Prix</span>
           </button>
           <div class="pin-menu" id="price-menu" hidden></div>
         </div>
         <div class="pin-select" id="sort-picker">
           <button type="button" class="pin-trigger" id="sort-btn">
+            <span class="ico" id="ico-sort"></span>
             <span id="sort-label">Visites</span>
           </button>
           <div class="pin-menu" id="sort-menu" hidden></div>
@@ -581,6 +600,10 @@
       out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 7V5a2 2 0 0 1 2-2h7v18h-7a2 2 0 0 1-2-2v-2"/><path d="M15 12H3m0 0 3-3M3 12l3 3"/></svg>',
       install: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M5 19h14"/></svg>',
       food: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v18M6 3c0 3 2 3.2 2 7M10 3c0 3-2 3.2-2 7M16 3v7a2.5 2.5 0 0 1-2.5 2.5V21M16 3h2.5v6H16"/></svg>',
+      menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+      done: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11.5 12 14.5 20 6.5"/><path d="M21 12a9 9 0 1 1-2.2-5.8"/></svg>',
+      price: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 6.5H9.8a3.2 3.2 0 0 0 0 6.4h4.4a3.2 3.2 0 0 1 0 6.4H7"/></svg>',
+      sort: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h10M4 12h7M4 17h4M16 5v14m0 0 3.5-3.5M16 19l-3.5-3.5"/></svg>',
       eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
       eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.5 10.7a3 3 0 0 0 4.1 4.1M9.9 5.2A11 11 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-4.2 4.8M6.1 6.6C3.5 8.5 2 12 2 12s3.5 7 10 7c1.6 0 3-.3 4.3-.8"/></svg>',
     };
@@ -1152,6 +1175,21 @@
         if (menu) menu.hidden = true;
       }
     }
+    function closeAcc() {
+      document.getElementById("acc")?.classList.remove("open");
+      const menu = document.getElementById("acc-menu");
+      if (menu) menu.hidden = true;
+      document.getElementById("acc-btn")?.setAttribute("aria-expanded", "false");
+    }
+    function toggleAcc() {
+      const acc = document.getElementById("acc");
+      const menu = document.getElementById("acc-menu");
+      const open = !acc.classList.contains("open");
+      closeSelects();
+      acc.classList.toggle("open", open);
+      menu.hidden = !open;
+      document.getElementById("acc-btn").setAttribute("aria-expanded", open ? "true" : "false");
+    }
     function placeMenu(name) {
       const btn = document.getElementById(name + "-btn");
       const menu = document.getElementById(name + "-menu");
@@ -1164,6 +1202,7 @@
       menu.style.minWidth = `${Math.round(width)}px`;
     }
     function toggleSelect(name) {
+      closeAcc();
       const picker = document.getElementById(name + "-picker");
       const menu = document.getElementById(name + "-menu");
       const open = !picker.classList.contains("open");
@@ -1330,13 +1369,17 @@
           });
         }
         document.addEventListener("click", (e) => {
+          if (!e.target.closest(".acc")) closeAcc();
           if (e.target.closest(".pin-select") || e.target.closest(".pin-menu")) return;
           closeSelects();
         });
-        window.addEventListener("scroll", () => closeSelects(), true);
-        window.addEventListener("resize", () => closeSelects());
-        document.getElementById("btn-export").addEventListener("click", exportProgress);
-        document.getElementById("btn-import").addEventListener("click", () => document.getElementById("import-file").click());
+        window.addEventListener("scroll", () => { closeSelects(); closeAcc(); }, true);
+        window.addEventListener("resize", () => { closeSelects(); closeAcc(); });
+        document.getElementById("btn-export").addEventListener("click", () => { closeAcc(); exportProgress(); });
+        document.getElementById("btn-import").addEventListener("click", () => {
+          closeAcc();
+          document.getElementById("import-file").click();
+        });
         document.getElementById("import-file").addEventListener("change", importProgress);
         document.getElementById("btn-random").addEventListener("click", () => pickRandom());
         document.getElementById("draw-again").addEventListener("click", () => pickRandom());
@@ -1345,9 +1388,13 @@
           if (e.target.id === "draw-sheet") closeDraw(false);
         });
         document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape") closeDraw(false);
+          if (e.key === "Escape") { closeDraw(false); closeSelects(); closeAcc(); }
         });
         document.getElementById("btn-logout").addEventListener("click", logout);
+        document.getElementById("acc-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleAcc();
+        });
         state.ready = true;
       }
       if (announce) toast("Guide mis à jour");
@@ -1404,10 +1451,14 @@
     document.getElementById("ico-pin").innerHTML = ICO.pin;
     document.getElementById("ico-food").innerHTML = ICO.food;
     document.getElementById("ico-near").innerHTML = ICO.near;
-    document.getElementById("btn-export").innerHTML = ICO.down;
-    document.getElementById("btn-import").innerHTML = ICO.up;
-    document.getElementById("btn-logout").innerHTML = ICO.out;
-    document.getElementById("btn-install").innerHTML = ICO.install;
+    document.getElementById("ico-done").innerHTML = ICO.done;
+    document.getElementById("ico-price").innerHTML = ICO.price;
+    document.getElementById("ico-sort").innerHTML = ICO.sort;
+    document.getElementById("acc-btn").innerHTML = `<span class="ico">${ICO.menu}</span>`;
+    document.getElementById("btn-export").innerHTML = `<span class="ico">${ICO.down}</span>Exporter`;
+    document.getElementById("btn-import").innerHTML = `<span class="ico">${ICO.up}</span>Importer`;
+    document.getElementById("btn-logout").innerHTML = `<span class="ico">${ICO.out}</span>Déconnexion`;
+    document.getElementById("btn-install").innerHTML = `<span class="ico">${ICO.install}</span>Installer l’app`;
     document.getElementById("btn-random").innerHTML = `<span class="ico">${ICO.dice}</span>Hasard`;
     document.getElementById("btn-rand-user").innerHTML = `<span class="ico">${ICO.dice}</span>`;
     document.getElementById("btn-rand-pass").innerHTML = `<span class="ico">${ICO.dice}</span>`;
