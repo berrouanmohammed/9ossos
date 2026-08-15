@@ -1,0 +1,26 @@
+{
+  "name": "9ossos — Carnet resto",
+  "short_name": "9ossos",
+  "description": "Ton carnet de visites : coche les restos et les plats déjà goûtés.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#100e0c",
+  "theme_color": "#100e0c",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -15,6 +15,7 @@ const TYPES = {
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".svg": "image/svg+xml",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".ico": "image/x-icon"
@@ -22,10 +23,22 @@ const TYPES = {
 
 function safePath(urlPath) {
   const decoded = decodeURIComponent(urlPath.split("?")[0]);
-  if (decoded === "/" || decoded === "/index.html") return path.join(ROOT, "index.html");
-  if (decoded === "/restaurants.json") return path.join(ROOT, "restaurants.json");
-  if (decoded === "/geocodes.json") return path.join(ROOT, "geocodes.json");
-  return null;
+  const files = {
+    "/": "index.html",
+    "/index.html": "index.html",
+    "/restaurants.json": "restaurants.json",
+    "/geocodes.json": "geocodes.json",
+    "/manifest.webmanifest": "manifest.webmanifest",
+    "/sw.js": "sw.js",
+    "/icon-192.png": "icon-192.png",
+    "/icon-512.png": "icon-512.png",
+    "/icon-180.png": "icon-180.png",
+    "/favicon.ico": "icon-192.png",
+    "/favicon.png": "icon-192.png",
+    "/apple-touch-icon.png": "icon-180.png"
+  };
+  const name = files[decoded];
+  return name ? path.join(ROOT, name) : null;
 }
 
 const server = http.createServer(async (req, res) => {
@@ -48,11 +61,6 @@ const server = http.createServer(async (req, res) => {
     }
 
     const urlPath = String(req.url || "/").split("?")[0];
-    if (urlPath === "/favicon.ico" || urlPath === "/favicon.png") {
-      res.writeHead(204);
-      res.end();
-      return;
-    }
 
     let filePath = safePath(urlPath);
     if (!filePath) return send(res, 403, "Forbidden");

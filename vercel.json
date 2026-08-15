@@ -1,7 +1,7 @@
 {
   "functions": {
     "server.js": {
-      "includeFiles": "{index.html,restaurants.json,geocodes.json,lib/**}"
+      "includeFiles": "{index.html,restaurants.json,geocodes.json,manifest.webmanifest,sw.js,icon-192.png,icon-512.png,icon-180.png,lib/**}"
     }
   },
   "rewrites": [

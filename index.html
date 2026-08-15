@@ -7,6 +7,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>9ossos — Carnet resto</title>
+  <meta name="description" content="Ton carnet de visites : coche les restos et les plats déjà goûtés." />
+  <meta name="apple-mobile-web-app-title" content="9ossos" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/icon-180.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://images.unsplash.com" />
@@ -417,6 +422,16 @@
       background: var(--gold); color: #1a140c; font-weight: 700; cursor: pointer;
     }
     .gate-go:disabled { opacity: 0.55; cursor: wait; }
+    .gate-install, .ios-hint {
+      width: 100%; margin-top: 10px;
+      min-height: 44px; border: 1px solid var(--line); border-radius: 14px;
+      background: transparent; color: var(--gold); font-weight: 600; cursor: pointer;
+    }
+    .ios-hint {
+      display: none; align-items: center; justify-content: center; text-align: center;
+      font-size: 0.82rem; color: var(--muted); cursor: default; line-height: 1.35; padding: 10px 12px;
+    }
+    .ios-hint.show { display: flex; }
   </style>
 </head>
 <body>
@@ -456,6 +471,8 @@
       </div>
       <p class="gate-err" id="auth-err"></p>
       <button class="gate-go" id="auth-go" type="submit">Entrer</button>
+      <button class="gate-install" id="btn-install-gate" type="button" hidden>Installer l’app</button>
+      <p class="ios-hint" id="ios-install">Sur iPhone : Partager → Sur l’écran d’accueil</p>
     </form>
   </div>
   <div class="wrap" id="app" hidden>
@@ -466,6 +483,7 @@
           <p class="tagline">Ton carnet de visites : coche les restos et les plats déjà goûtés.</p>
         </div>
         <div class="header-actions">
+          <button class="icon-btn" id="btn-install" type="button" title="Installer l’app" aria-label="Installer l’app" hidden></button>
           <div class="user-chip">
             <span id="user-name"></span>
             <button class="icon-btn" id="btn-logout" type="button" title="Déconnexion" aria-label="Déconnexion"></button>
@@ -554,6 +572,7 @@
       up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V8M7 12l5-5 5 5M5 4h14"/></svg>',
       dice: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><circle cx="16" cy="8" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="8" cy="16" r="1.2" fill="currentColor"/><circle cx="16" cy="16" r="1.2" fill="currentColor"/></svg>',
       out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 7V5a2 2 0 0 1 2-2h7v18h-7a2 2 0 0 1-2-2v-2"/><path d="M15 12H3m0 0 3-3M3 12l3 3"/></svg>',
+      install: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M5 19h14"/></svg>',
       eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
       eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.5 10.7a3 3 0 0 0 4.1 4.1M9.9 5.2A11 11 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-4.2 4.8M6.1 6.6C3.5 8.5 2 12 2 12s3.5 7 10 7c1.6 0 3-.3 4.3-.8"/></svg>',
     };
@@ -1330,6 +1349,7 @@
     document.getElementById("btn-export").innerHTML = ICO.down;
     document.getElementById("btn-import").innerHTML = ICO.up;
     document.getElementById("btn-logout").innerHTML = ICO.out;
+    document.getElementById("btn-install").innerHTML = ICO.install;
     document.getElementById("btn-random").innerHTML = `<span class="ico">${ICO.dice}</span>Hasard`;
     document.getElementById("btn-rand-user").innerHTML = `<span class="ico">${ICO.dice}</span>`;
     document.getElementById("btn-rand-pass").innerHTML = `<span class="ico">${ICO.dice}</span>`;
@@ -1473,6 +1493,34 @@
       live.addEventListener("data", () => { if (state.user) loadData(true); });
       live.addEventListener("geo", () => { if (state.user) loadGeo(); });
     }
+
+    let installEvent = null;
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+    function showInstallButtons(show) {
+      document.getElementById("btn-install").hidden = !show;
+      document.getElementById("btn-install-gate").hidden = !show;
+    }
+    async function installApp() {
+      if (!installEvent) return;
+      installEvent.prompt();
+      await installEvent.userChoice;
+      installEvent = null;
+      showInstallButtons(false);
+    }
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      installEvent = e;
+      if (!standalone) showInstallButtons(true);
+    });
+    window.addEventListener("appinstalled", () => showInstallButtons(false));
+    document.getElementById("btn-install").addEventListener("click", installApp);
+    document.getElementById("btn-install-gate").addEventListener("click", installApp);
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (ios && !standalone) document.getElementById("ios-install").classList.add("show");
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+
     boot();
   </script>
 </body>
