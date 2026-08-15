@@ -49,7 +49,7 @@
     .wrap {
       max-width: 720px;
       margin: 0 auto;
-      padding: calc(18px + var(--safe-t)) 16px calc(28px + var(--safe-b));
+      padding: calc(18px + var(--safe-t)) 16px calc(88px + var(--safe-b));
     }
     @media (min-width: 900px) {
       .wrap { max-width: 1280px; padding-left: 24px; padding-right: 24px; }
@@ -111,17 +111,26 @@
       cursor: pointer;
     }
     .random-btn {
+      position: fixed;
+      left: max(16px, env(safe-area-inset-left, 0px));
+      bottom: calc(22px + var(--safe-b));
+      z-index: 45;
       width: auto;
+      height: 48px;
       display: flex;
       align-items: center;
       gap: 7px;
-      padding: 0 14px;
+      padding: 0 16px;
       background: var(--gold);
       color: #1a140c;
-      border-color: var(--gold);
+      border: 0;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
       font-weight: 700;
       font-size: 0.88rem;
+      cursor: pointer;
     }
+    .random-btn .ico { width: 20px; height: 20px; }
 
     .progress {
       display: grid;
@@ -383,7 +392,7 @@
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .to-top {
       position: fixed;
-      right: 16px;
+      right: max(16px, env(safe-area-inset-right, 0px));
       bottom: calc(22px + var(--safe-b));
       z-index: 45;
       width: 48px;
@@ -522,7 +531,6 @@
           <p class="tagline">Ton carnet de visites : coche les restos et les plats déjà goûtés.</p>
         </div>
         <div class="header-actions">
-          <button class="icon-btn random-btn" id="btn-random" type="button" aria-label="Choisir un resto au hasard">Hasard</button>
           <div class="acc" id="acc">
             <button class="icon-btn acc-btn" id="acc-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Menu"></button>
             <div class="acc-menu" id="acc-menu" hidden role="menu">
@@ -596,6 +604,7 @@
     <div id="boot" class="boot">Ouverture du carnet…</div>
     <div id="empty" class="empty" hidden>Rien ici pour l’instant.</div>
     <div class="grid" id="grid"></div>
+    <button class="random-btn" id="btn-random" type="button" aria-label="Choisir un resto au hasard">Hasard</button>
   </div>
   <div class="sheet-bg" id="draw-sheet" hidden>
     <div class="sheet" role="dialog" aria-labelledby="draw-title">
