@@ -10,9 +10,14 @@ npm start
 
 Ouvre [http://localhost:3000](http://localhost:3000).
 
-## En ligne (gratuit)
+## En ligne (gratuit, sans carte)
 
-1. Crée un compte sur [Render](https://render.com) avec GitHub (sans carte bancaire).
-2. Déploie ce repo en service web **Free** :
+Sur [Render](https://dashboard.render.com) :
 
-[https://render.com/deploy?repo=https://github.com/berrouanmohammed/9ossos](https://render.com/deploy?repo=https://github.com/berrouanmohammed/9ossos)
+1. **New → Web Service**
+2. Relie le repo [berrouanmohammed/9ossos](https://github.com/berrouanmohammed/9ossos)
+3. Runtime **Node**, build `npm install`, start `npm start`
+4. Instance **Free** (pas Starter)
+5. **Deploy**
+
+N’utilise pas “Blueprint” : ça demande une carte bancaire.
