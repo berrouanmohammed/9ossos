@@ -58,7 +58,7 @@ function detectCity(text) {
     if (lower.includes(city.toLowerCase())) return CITY_ALIAS[city] || city;
   }
   if (/\bcasa\b/i.test(text) || text.includes("كازا")) return "Casablanca";
-  return "Ailleurs";
+  return "";
 }
 
 function normName(name) {
@@ -78,9 +78,8 @@ function parse(raw) {
     name = parts[0] || loc;
     address = parts.slice(1).join(", ");
   }
-  let city = detectCity(text);
-  const lastBit = (address || "").split(",").pop().trim();
-  if (/^marrakech$/i.test(lastBit)) city = "Casablanca";
+  const lastBit = (address || "").split(",").map((p) => p.trim()).filter(Boolean).pop() || "";
+  const city = detectCity(lastBit) || detectCity(address) || detectCity(name) || detectCity(text) || "Ailleurs";
   if (!name) return null;
   return {
     key: `${normName(name)}|${city}`,
