@@ -44,7 +44,53 @@ function safePath(urlPath) {
 function withoutCardImages(html) {
   return html.replace(
     "</head>",
-    "<style id=\"no-card-images\">.cover img{display:none!important}</style></head>"
+    `<style id="compact-card-layout">
+      .cover {
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 16px 16px 14px !important;
+        overflow: visible !important;
+        background: transparent !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        border-bottom: 1px solid var(--line);
+      }
+      .cover img,
+      .cover-mark,
+      .cover-grad {
+        display: none !important;
+      }
+      .cover-top {
+        position: static !important;
+        inset: auto !important;
+        order: 1;
+        display: flex !important;
+        gap: 6px !important;
+        flex-wrap: wrap !important;
+      }
+      .cover h2 {
+        position: static !important;
+        inset: auto !important;
+        order: 2;
+        margin: 0 !important;
+        font-size: 1.45rem !important;
+        line-height: 1.15 !important;
+      }
+      .visit-btn {
+        position: static !important;
+        inset: auto !important;
+        order: 3;
+        align-self: flex-start !important;
+        margin: 0 !important;
+      }
+      .pill {
+        background: rgba(224, 177, 92, 0.10) !important;
+        border: 1px solid rgba(224, 177, 92, 0.18);
+        backdrop-filter: none !important;
+      }
+    </style></head>`
   );
 }
 
