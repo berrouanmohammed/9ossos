@@ -41,6 +41,13 @@ function safePath(urlPath) {
   return name ? path.join(ROOT, name) : null;
 }
 
+function withoutCardImages(html) {
+  return html.replace(
+    "</head>",
+    "<style id=\"no-card-images\">.cover img{display:none!important}</style></head>"
+  );
+}
+
 const server = http.createServer(async (req, res) => {
   try {
     if (req.url.startsWith("/__live")) {
@@ -70,6 +77,9 @@ const server = http.createServer(async (req, res) => {
       const type = TYPES[path.extname(filePath).toLowerCase()] || "application/octet-stream";
       fs.readFile(filePath, (readErr, data) => {
         if (readErr) return send(res, 500, "Read error");
+        if (path.basename(filePath) === "index.html") {
+          return send(res, 200, withoutCardImages(data.toString("utf8")), type);
+        }
         send(res, 200, data, type);
       });
     });
